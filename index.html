@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My AI Voice Agent — AI Voice Agents for UK Business</title>
+  <meta name="description" content="myaivoiceagent.co deploys AI voice agents that answer calls, book appointments, and handle enquiries 24/7 — so your business never misses a call again. A Nothing But Value brand." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
+          colors: {
+            navy: { 950:'#060C1A', 900:'#0F172A', 800:'#1E293B', 700:'#334155', 600:'#475569' },
+            sky:  { 700:'#0369A1', 600:'#0284C7', 500:'#0EA5E9', 400:'#38BDF8', 100:'#E0F2FE', 50:'#F0F9FF' }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    /* ── Gradient text ── */
+    .gt { background: linear-gradient(135deg, #0369A1 0%, #38BDF8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+    /* ── Animated blobs ── */
+    .blob { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.18; pointer-events: none; will-change: transform; }
+    .blob-1 { width: 700px; height: 700px; background: #0369A1; top: -200px; left: -200px; animation: blobMove1 18s ease-in-out infinite; }
+    .blob-2 { width: 500px; height: 500px; background: #38BDF8; top: 100px; right: -100px; animation: blobMove2 22s ease-in-out infinite; }
+    .blob-3 { width: 400px; height: 400px; background: #7C3AED; bottom: -100px; left: 40%; animation: blobMove3 15s ease-in-out infinite; }
+    @keyframes blobMove1 { 0%,100%{transform:translate(0,0) scale(1)} 40%{transform:translate(60px,-80px) scale(1.08)} 70%{transform:translate(-40px,40px) scale(0.94)} }
+    @keyframes blobMove2 { 0%,100%{transform:translate(0,0) scale(1)} 35%{transform:translate(-50px,60px) scale(1.1)} 65%{transform:translate(30px,-30px) scale(0.92)} }
+    @keyframes blobMove3 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(-60px,-40px) scale(1.12)} }
+
+    /* ── Grid lines bg ── */
+    .grid-bg { background-image: linear-gradient(to right,rgba(148,163,184,.07) 1px,transparent 1px), linear-gradient(to bottom,rgba(148,163,184,.07) 1px,transparent 1px); background-size: 60px 60px; }
+
+    /* ── Waveform bars ── */
+    .wbar { width: 3px; border-radius: 3px; background: linear-gradient(to top, #0369A1, #38BDF8); transform-origin: bottom; animation: waveBar 1.1s ease-in-out infinite; }
+    @keyframes waveBar { 0%,100%{transform:scaleY(0.2)} 50%{transform:scaleY(1)} }
+
+    /* ── Call card ring ── */
+    .live-ring { position:absolute; inset:-10px; border-radius:50%; border:2px solid rgba(3,105,161,0.4); animation: ringOut 2s ease-out infinite; }
+    .live-ring-2 { animation-delay: 1s; }
+    @keyframes ringOut { 0%{opacity:.7;inset:-4px} 100%{opacity:0;inset:-24px} }
+
+    /* ── Floating notification ── */
+    .notif { animation: notifSlide 0.5s cubic-bezier(0.34,1.56,0.64,1) forwards; opacity: 0; }
+    @keyframes notifSlide { 0%{opacity:0;transform:translateX(60px)} 100%{opacity:1;transform:translateX(0)} }
+
+    /* ── Scroll reveal ── */
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity .65s ease, transform .65s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── Ticker ── */
+    @keyframes ticker { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+    .ticker-track { animation: ticker 24s linear infinite; }
+    .ticker-track:hover { animation-play-state: paused; }
+
+    /* ── Animated gradient border button ── */
+    .btn-glow { position: relative; z-index: 0; }
+    .btn-glow::before { content:''; position:absolute; inset:-2px; border-radius:14px; background: linear-gradient(90deg,#0369A1,#38BDF8,#7C3AED,#0369A1); background-size:300%; animation: gradBorder 3s linear infinite; z-index:-1; }
+    @keyframes gradBorder { 0%{background-position:0%} 100%{background-position:300%} }
+
+    /* ── 3D tilt ── */
+    .tilt { transition: transform .15s ease, box-shadow .15s ease; will-change: transform; }
+
+    /* ── Bento card hover glow ── */
+    .bento-card { transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
+    .bento-card:hover { transform: translateY(-4px); box-shadow: 0 20px 60px -12px rgba(3,105,161,.18); border-color: #7DD3FC; }
+
+    /* ── Stat counter ── */
+    .counter { font-variant-numeric: tabular-nums; }
+
+    /* ── Typewriter cursor ── */
+    .tw-cursor { display:inline-block; width:3px; height:1em; background:#0369A1; margin-left:2px; vertical-align:text-bottom; animation: blink .7s step-end infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+    /* ── Accordion ── */
+    details summary { list-style: none; }
+    details summary::-webkit-details-marker { display: none; }
+    details[open] summary svg { transform: rotate(180deg); }
+    details summary svg { transition: transform .2s ease; }
+
+    /* ── Progress bar ── */
+    .prog-bar { height: 4px; border-radius: 2px; background: rgba(255,255,255,.12); overflow: hidden; }
+    .prog-fill { height: 100%; border-radius: 2px; background: linear-gradient(90deg, #0369A1, #38BDF8); width: 0; transition: width 1.6s cubic-bezier(.4,0,.2,1); }
+
+    /* ── Step connector ── */
+    .step-line { flex: 1; height: 1px; background: linear-gradient(90deg, #CBD5E1, transparent); }
+
+    /* ── Glassmorphism ── */
+    .glass { background: rgba(255,255,255,.82); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,.6); }
+
+    /* ── Hero industry chip ticker ── */
+    @keyframes chipTicker { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+    .chip-track { animation: chipTicker 28s linear infinite; }
+    .chip-track:hover { animation-play-state: paused; }
+
+    /* ── Flowchart nodes — rich visual style ── */
+    .flow-node {
+      display: block; text-align: center; font-size: 12px; font-weight: 600;
+      padding: 10px 16px; border-radius: 14px; line-height: 1.4;
+      border: 1.5px solid #E2E8F0;
+      background: linear-gradient(145deg, #F8FAFC 0%, #EFF4FB 100%);
+      color: #334155;
+      box-shadow: 0 2px 10px rgba(0,0,0,.06), inset 0 1px 0 rgba(255,255,255,.8);
+      position: relative;
+    }
+    .flow-node.trigger {
+      background: linear-gradient(145deg, #EFF6FF 0%, #DBEAFE 100%);
+      border-color: #93C5FD; color: #1E40AF; font-weight: 700;
+      box-shadow: 0 4px 16px rgba(59,130,246,.15), inset 0 1px 0 rgba(255,255,255,.7);
+    }
+    .flow-node.success {
+      background: linear-gradient(145deg, #F0FDF4 0%, #DCFCE7 100%);
+      border-color: #86EFAC; color: #166534; font-weight: 700;
+      box-shadow: 0 4px 16px rgba(34,197,94,.15), inset 0 1px 0 rgba(255,255,255,.7);
+    }
+    .flow-node.warn {
+      background: linear-gradient(145deg, #FFFBEB 0%, #FEF3C7 100%);
+      border-color: #FCD34D; color: #92400E;
+      box-shadow: 0 4px 16px rgba(245,158,11,.12), inset 0 1px 0 rgba(255,255,255,.7);
+    }
+    .flow-arrow { display:flex; justify-content:center; margin:4px 0; }
+
+    /* ── Scenario column accent ── */
+    .scenario-col { border-radius: 16px; padding: 16px; transition: box-shadow .2s; }
+    .scenario-col:hover { box-shadow: 0 8px 32px rgba(3,105,161,.08); }
+    .scenario-col-a { background: linear-gradient(160deg, #F0F9FF 0%, #E0F2FE 100%); border: 1px solid #BAE6FD; }
+    .scenario-col-b { background: linear-gradient(160deg, #FFFBEB 0%, #FEF9EE 100%); border: 1px solid #FDE68A; }
+    .scenario-col-b-red { background: linear-gradient(160deg, #FFF5F5 0%, #FEE2E2 100%); border: 1px solid #FECACA; }
+    .scenario-col-b-dark { background: linear-gradient(160deg, #F8FAFC 0%, #EFF4FB 100%); border: 1px solid #CBD5E1; }
+
+    /* ── Scenario label badge ── */
+    .sc-badge-a { background: #0369A1; color: white; width: 22px; height: 22px; border-radius: 50%; display:inline-flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; flex-shrink:0; box-shadow: 0 2px 8px rgba(3,105,161,.3); }
+    .sc-badge-b { background: #D97706; color: white; width: 22px; height: 22px; border-radius: 50%; display:inline-flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; flex-shrink:0; box-shadow: 0 2px 8px rgba(217,119,6,.3); }
+    .sc-badge-b-red { background: #DC2626; color: white; width: 22px; height: 22px; border-radius: 50%; display:inline-flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; flex-shrink:0; box-shadow: 0 2px 8px rgba(220,38,38,.3); }
+    .sc-badge-b-dark { background: #64748B; color: white; width: 22px; height: 22px; border-radius: 50%; display:inline-flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; flex-shrink:0; }
+
+    /* ── Industry card ── */
+    .ind-card { transition: box-shadow .2s ease, transform .2s ease; }
+    .ind-card:hover { box-shadow: 0 24px 60px -12px rgba(3,105,161,.12); transform: translateY(-3px); }
+
+    /* ── Value metric chip ── */
+    .val-chip { display:flex; flex-direction:column; align-items:center; gap:2px; }
+    .val-chip .v { font-size:1.4rem; font-weight:800; background: linear-gradient(135deg,#0369A1,#38BDF8); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .val-chip .l { font-size:11px; color:#64748B; font-weight:500; text-align:center; line-height:1.3; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body class="font-sans bg-slate-50 text-navy-900 antialiased overflow-x-hidden">
+
+<!-- ═══════════════════════════════════════
+     NAVBAR
+═══════════════════════════════════════ -->
+<header class="fixed top-4 left-4 right-4 z-50">
+  <nav class="max-w-6xl mx-auto glass rounded-2xl px-6 py-3 flex items-center justify-between shadow-sm">
+    <a href="#" class="flex items-center gap-2.5 cursor-pointer">
+      <div class="w-8 h-8 bg-sky-700 rounded-xl flex items-center justify-center shadow-sm">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" class="w-4 h-4" aria-hidden="true"><path d="M12 2a3 3 0 0 1 3 3v7a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v3M8 22h8"/></svg>
+      </div>
+      <div>
+        <span class="font-extrabold text-navy-900 tracking-tight text-sm">myaivoiceagent<span class="text-sky-600">.co</span></span>
+        <p class="text-navy-500 text-[10px] leading-none mt-0.5">by Nothing But Value</p>
+      </div>
+    </a>
+    <ul class="hidden md:flex items-center gap-6 text-sm font-medium text-navy-700">
+      <li><a href="#how-it-works" class="hover:text-sky-700 transition-colors cursor-pointer">How It Works</a></li>
+      <li><a href="#industries"   class="hover:text-sky-700 transition-colors cursor-pointer">Industries</a></li>
+      <li><a href="#results"      class="hover:text-sky-700 transition-colors cursor-pointer">Results</a></li>
+      <li><a href="#pricing"      class="hover:text-sky-700 transition-colors cursor-pointer">Pricing</a></li>
+    </ul>
+    <a href="#contact" class="hidden md:inline-flex items-center gap-2 bg-sky-700 text-white text-sm font-semibold px-5 py-2.5 rounded-xl hover:bg-sky-600 transition-colors cursor-pointer">
+      Book a Demo
+      <svg viewBox="0 0 16 16" fill="currentColor" class="w-3.5 h-3.5" aria-hidden="true"><path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793L10.146 4.354a.5.5 0 1 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/></svg>
+    </a>
+    <button id="menu-btn" class="md:hidden p-2 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer" aria-label="Open menu" aria-expanded="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-5 h-5" aria-hidden="true"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+    </button>
+  </nav>
+  <div id="mobile-menu" class="hidden max-w-6xl mx-auto mt-2 bg-white border border-slate-200 rounded-2xl shadow-lg px-6 py-4 space-y-3">
+    <a href="#how-it-works" class="block text-sm font-medium text-navy-700 hover:text-sky-700 transition-colors cursor-pointer">How It Works</a>
+    <a href="#industries"   class="block text-sm font-medium text-navy-700 hover:text-sky-700 transition-colors cursor-pointer">Industries</a>
+    <a href="#results"      class="block text-sm font-medium text-navy-700 hover:text-sky-700 transition-colors cursor-pointer">Results</a>
+    <a href="#pricing"      class="block text-sm font-medium text-navy-700 hover:text-sky-700 transition-colors cursor-pointer">Pricing</a>
+    <a href="#contact"      class="block text-sm font-semibold bg-sky-700 text-white text-center py-2.5 rounded-xl hover:bg-sky-600 transition-colors cursor-pointer">Book a Demo</a>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════
+     HERO
+═══════════════════════════════════════ -->
+<section class="relative min-h-screen flex items-center pt-28 pb-20 px-4 overflow-hidden grid-bg">
+  <!-- Animated blobs -->
+  <div class="blob blob-1" aria-hidden="true"></div>
+  <div class="blob blob-2" aria-hidden="true"></div>
+  <div class="blob blob-3" aria-hidden="true"></div>
+
+  <div class="max-w-6xl mx-auto w-full relative z-10">
+    <div class="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
+
+      <!-- Left copy -->
+      <div>
+        <div class="inline-flex items-center gap-2 bg-sky-50 border border-sky-200 text-sky-700 text-xs font-semibold px-4 py-1.5 rounded-full mb-6" style="opacity:0;animation:fadeUpIn .6s ease .1s forwards">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 inline-block animate-pulse" aria-hidden="true"></span>
+          myaivoiceagent.co — Live Across the UK
+        </div>
+
+        <h1 class="text-5xl lg:text-6xl font-extrabold text-navy-900 leading-[1.08] mb-6 tracking-tight" style="opacity:0;animation:fadeUpIn .6s ease .2s forwards">
+          Your phone answers<br/>
+          itself — for every<br/>
+          <span class="gt" id="typewriter-wrap"><span id="typewriter"></span><span class="tw-cursor" aria-hidden="true"></span></span>
+        </h1>
+
+        <p class="text-lg text-navy-600 leading-relaxed mb-8 max-w-lg" style="opacity:0;animation:fadeUpIn .6s ease .35s forwards">
+          <strong>myaivoiceagent.co</strong> deploys AI voice agents that sound human, book appointments, answer FAQs, and handle calls 24/7 — no staff, no missed revenue. <span class="text-navy-500 font-normal">A Nothing But Value brand.</span>
+        </p>
+
+        <div class="flex flex-col sm:flex-row gap-4 mb-12" style="opacity:0;animation:fadeUpIn .6s ease .45s forwards">
+          <a href="#contact" class="btn-glow inline-flex items-center justify-center gap-2 bg-sky-700 text-white font-semibold text-base px-8 py-4 rounded-xl hover:bg-sky-600 transition-colors cursor-pointer shadow-lg">
+            Book a Free Demo
+            <svg viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4" aria-hidden="true"><path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793L10.146 4.354a.5.5 0 1 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/></svg>
+          </a>
+          <a href="#how-it-works" class="inline-flex items-center justify-center gap-2 bg-white border border-slate-200 text-navy-800 font-semibold text-base px-8 py-4 rounded-xl hover:bg-slate-50 transition-colors cursor-pointer">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+            See How It Works
+          </a>
+        </div>
+
+        <!-- Stats strip -->
+        <div class="grid grid-cols-3 gap-4 max-w-sm" style="opacity:0;animation:fadeUpIn .6s ease .55s forwards">
+          <div>
+            <p class="text-3xl font-extrabold text-navy-900 counter" data-target="100">0</p>
+            <p class="text-xs text-navy-600 mt-0.5 font-medium">% calls answered</p>
+          </div>
+          <div class="border-x border-slate-200 px-4">
+            <p class="text-3xl font-extrabold text-navy-900">&lt;1s</p>
+            <p class="text-xs text-navy-600 mt-0.5 font-medium">response time</p>
+          </div>
+          <div class="pl-4">
+            <p class="text-3xl font-extrabold text-navy-900 counter" data-target="5">0</p>
+            <p class="text-xs text-navy-600 mt-0.5 font-medium">days to go live</p>
+          </div>
+        </div>
+
+        <!-- ── Industry chip ticker (visible on hero, no scroll needed) ── -->
+        <div class="mt-8 max-w-sm" style="opacity:0;animation:fadeUpIn .6s ease .7s forwards" aria-label="Industries we serve">
+          <p class="text-xs text-navy-500 font-semibold uppercase tracking-widest mb-3">Serving 11+ industries</p>
+          <div class="relative overflow-hidden">
+            <div class="absolute left-0 top-0 bottom-0 w-6 bg-gradient-to-r from-slate-50 to-transparent z-10 pointer-events-none" aria-hidden="true"></div>
+            <div class="absolute right-0 top-0 bottom-0 w-6 bg-gradient-to-l from-slate-50 to-transparent z-10 pointer-events-none" aria-hidden="true"></div>
+            <div class="flex gap-2 chip-track" id="hero-chip-ticker"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right — live call card -->
+      <div class="relative flex justify-center lg:justify-end" style="opacity:0;animation:fadeUpIn .7s ease .3s forwards">
+        <!-- Floating "Call answered" toast -->
+        <div id="toast-1" class="absolute -top-4 -left-4 lg:-left-12 z-20 hidden">
+          <div class="glass rounded-xl px-4 py-3 shadow-lg flex items-center gap-3">
+            <div class="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center flex-shrink-0">
+              <svg viewBox="0 0 20 20" fill="#10B981" class="w-4 h-4" aria-hidden="true"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 0 1 0 1.414l-8 8a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 1.414-1.414L8 12.586l7.293-7.293a1 1 0 0 1 1.414 0z"/></svg>
+            </div>
+            <div>
+              <p class="text-xs font-bold text-navy-900">Call answered</p>
+              <p class="text-xs text-navy-600">in 0.6 seconds</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Floating "Appointment booked" toast -->
+        <div id="toast-2" class="absolute -bottom-4 -right-4 lg:-right-8 z-20 hidden">
+          <div class="glass rounded-xl px-4 py-3 shadow-lg flex items-center gap-3">
+            <div class="w-8 h-8 bg-sky-100 rounded-full flex items-center justify-center flex-shrink-0">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#0369A1" stroke-width="2" class="w-4 h-4" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            </div>
+            <div>
+              <p class="text-xs font-bold text-navy-900">Appointment booked</p>
+              <p class="text-xs text-navy-600">Thu 20 Mar, 2:30 pm</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Main call card -->
+        <div class="w-full max-w-sm bg-navy-900 rounded-3xl p-6 shadow-2xl border border-slate-700 relative overflow-hidden tilt" id="call-card">
+          <!-- Card internal glow -->
+          <div class="absolute inset-0 bg-gradient-to-br from-sky-900/30 to-violet-900/20 pointer-events-none" aria-hidden="true"></div>
+
+          <!-- Header -->
+          <div class="flex items-center justify-between mb-6 relative">
+            <div class="flex items-center gap-2.5">
+              <div class="relative w-9 h-9">
+                <div class="live-ring" aria-hidden="true"></div>
+                <div class="live-ring live-ring-2" aria-hidden="true"></div>
+                <div class="w-9 h-9 bg-sky-700 rounded-full flex items-center justify-center">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" class="w-4 h-4" aria-hidden="true"><path d="M12 2a3 3 0 0 1 3 3v7a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v3M8 22h8"/></svg>
+                </div>
+              </div>
+              <div>
+                <p class="text-white font-semibold text-sm">Sofia — NBV Agent</p>
+                <div class="flex items-center gap-1.5">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block animate-pulse" aria-hidden="true"></span>
+                  <span class="text-emerald-400 text-xs font-medium">Live Call</span>
+                </div>
+              </div>
+            </div>
+            <div class="text-right">
+              <p class="text-slate-400 text-xs">Duration</p>
+              <p class="text-white font-mono font-semibold text-sm" id="call-timer">00:00</p>
+            </div>
+          </div>
+
+          <!-- Waveform -->
+          <div class="bg-navy-800 rounded-2xl p-5 mb-5 relative" aria-label="Voice waveform visualisation">
+            <p class="text-slate-500 text-xs mb-3 font-medium uppercase tracking-widest">Voice Activity</p>
+            <div class="flex items-end gap-[3px] h-12" aria-hidden="true" id="waveform-container">
+            </div>
+          </div>
+
+          <!-- Transcript snippet -->
+          <div class="bg-navy-800 rounded-xl px-4 py-3 mb-5">
+            <p class="text-slate-400 text-xs mb-1">Transcript</p>
+            <p class="text-slate-200 text-sm leading-relaxed" id="transcript-text">"Good morning! I'd be happy to book that appointment for you…"</p>
+          </div>
+
+          <!-- Status chips -->
+          <div class="grid grid-cols-2 gap-2">
+            <div class="bg-emerald-900/40 border border-emerald-700/40 rounded-xl px-3 py-2 flex items-center gap-2">
+              <svg viewBox="0 0 20 20" fill="#34D399" class="w-4 h-4 flex-shrink-0" aria-hidden="true"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 0 1 0 1.414l-8 8a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 1.414-1.414L8 12.586l7.293-7.293a1 1 0 0 1 1.414 0z"/></svg>
+              <span class="text-emerald-300 text-xs font-medium">Details captured</span>
+            </div>
+            <div class="bg-sky-900/40 border border-sky-700/40 rounded-xl px-3 py-2 flex items-center gap-2">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#38BDF8" stroke-width="2" class="w-4 h-4 flex-shrink-0" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              <span class="text-sky-300 text-xs font-medium">Slot booked</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+@keyframes fadeUpIn { 0%{opacity:0;transform:translateY(24px)} 100%{opacity:1;transform:translateY(0)} }
+</style>
+
+<!-- ═══════════════════════════════════════
+     TICKER
+═══════════════════════════════════════ -->
+<div class="bg-navy-950 py-4 overflow-hidden border-y border-slate-800" aria-label="Industries we serve">
+  <div class="flex whitespace-nowrap ticker-track" id="ticker-inner"></div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     PROBLEM
+═══════════════════════════════════════ -->
+<section class="py-24 px-4 bg-white">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-14 reveal">
+      <p class="text-sky-700 font-semibold text-xs uppercase tracking-widest mb-3">The Real Cost of Missed Calls</p>
+      <h2 class="text-4xl font-extrabold text-navy-900">Every unanswered call is a lost customer</h2>
+      <p class="text-navy-600 mt-4 max-w-2xl mx-auto text-lg">Staff can't be available 24/7. Voicemails go ignored. Competitors who pick up get the booking.</p>
+    </div>
+    <div class="grid md:grid-cols-3 gap-8">
+      <div class="reveal tilt bg-slate-50 border border-slate-200 rounded-2xl p-8 hover:shadow-lg transition-shadow cursor-default">
+        <div class="w-12 h-12 bg-red-50 rounded-xl flex items-center justify-center mb-5">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2" class="w-6 h-6" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M4.93 4.93l14.14 14.14"/></svg>
+        </div>
+        <h3 class="font-bold text-navy-900 text-lg mb-2">62% won't leave a voicemail</h3>
+        <p class="text-navy-600 text-sm leading-relaxed">More than half of callers who can't reach you immediately book with a competitor. No second chances.</p>
+      </div>
+      <div class="reveal tilt bg-slate-50 border border-slate-200 rounded-2xl p-8 hover:shadow-lg transition-shadow cursor-default" style="transition-delay:80ms">
+        <div class="w-12 h-12 bg-amber-50 rounded-xl flex items-center justify-center mb-5">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="2" class="w-6 h-6" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+        </div>
+        <h3 class="font-bold text-navy-900 text-lg mb-2">Hours wasted on routine calls</h3>
+        <p class="text-navy-600 text-sm leading-relaxed">Appointment confirmations, opening hours, pricing enquiries — repetitive tasks that drain your team every single day.</p>
+      </div>
+      <div class="reveal tilt bg-slate-50 border border-slate-200 rounded-2xl p-8 hover:shadow-lg transition-shadow cursor-default" style="transition-delay:160ms">
+        <div class="w-12 h-12 bg-red-50 rounded-xl flex items-center justify-center mb-5">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2" class="w-6 h-6" aria-hidden="true"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        </div>
+        <h3 class="font-bold text-navy-900 text-lg mb-2">£80–£200 lost per missed call</h3>
+        <p class="text-navy-600 text-sm leading-relaxed">Across a week that's thousands of pounds silently slipping away — revenue that an AI agent captures automatically.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     HOW IT WORKS
+═══════════════════════════════════════ -->
+<section id="how-it-works" class="py-24 px-4 bg-slate-50 grid-bg">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-16 reveal">
+      <p class="text-sky-700 font-semibold text-xs uppercase tracking-widest mb-3">Process</p>
+      <h2 class="text-4xl font-extrabold text-navy-900">Live in 5 days. Zero technical effort.</h2>
+      <p class="text-navy-600 mt-4 max-w-xl mx-auto text-lg">We handle everything. You approve the script and take the calls.</p>
+    </div>
+    <div class="grid md:grid-cols-4 gap-6 relative">
+      <div class="hidden md:block absolute top-10 left-[13%] right-[13%] h-px bg-gradient-to-r from-slate-300 via-sky-300 to-slate-300" aria-hidden="true"></div>
+      <!-- Steps -->
+      <div class="reveal text-center relative z-10">
+        <div class="w-20 h-20 mx-auto mb-4 bg-sky-700 rounded-2xl flex items-center justify-center shadow-lg shadow-sky-200">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" class="w-8 h-8" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <span class="text-xs text-sky-600 font-bold uppercase tracking-widest">Step 1</span>
+        <h3 class="font-bold text-navy-900 mt-1 mb-2">Discovery Call</h3>
+        <p class="text-navy-600 text-sm leading-relaxed">30 minutes to map your call types, scenarios, and brand tone.</p>
+      </div>
+      <div class="reveal text-center relative z-10" style="transition-delay:80ms">
+        <div class="w-20 h-20 mx-auto mb-4 bg-sky-700 rounded-2xl flex items-center justify-center shadow-lg shadow-sky-200">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" class="w-8 h-8" aria-hidden="true"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        </div>
+        <span class="text-xs text-sky-600 font-bold uppercase tracking-widest">Step 2</span>
+        <h3 class="font-bold text-navy-900 mt-1 mb-2">Script &amp; Voice</h3>
+        <p class="text-navy-600 text-sm leading-relaxed">Custom script written, premium British voice selected to match your brand.</p>
+      </div>
+      <div class="reveal text-center relative z-10" style="transition-delay:160ms">
+        <div class="w-20 h-20 mx-auto mb-4 bg-sky-700 rounded-2xl flex items-center justify-center shadow-lg shadow-sky-200">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" class="w-8 h-8" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        </div>
+        <span class="text-xs text-sky-600 font-bold uppercase tracking-widest">Step 3</span>
+        <h3 class="font-bold text-navy-900 mt-1 mb-2">Build &amp; Test</h3>
+        <p class="text-navy-600 text-sm leading-relaxed">Agent built, tested, and refined. You call it live before it goes live.</p>
+      </div>
+      <div class="reveal text-center relative z-10" style="transition-delay:240ms">
+        <div class="w-20 h-20 mx-auto mb-4 bg-sky-700 rounded-2xl flex items-center justify-center shadow-lg shadow-sky-200">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" class="w-8 h-8" aria-hidden="true"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+        </div>
+        <span class="text-xs text-sky-600 font-bold uppercase tracking-widest">Step 4</span>
+        <h3 class="font-bold text-navy-900 mt-1 mb-2">Go Live</h3>
+        <p class="text-navy-600 text-sm leading-relaxed">Dedicated UK number live. Every call answered, logged, and actioned.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     INDUSTRIES — FLOWCHART CARDS
+═══════════════════════════════════════ -->
+<section id="industries" class="py-24 px-4 bg-white">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-16 reveal">
+      <p class="text-sky-700 font-semibold text-xs uppercase tracking-widest mb-3">Industries</p>
+      <h2 class="text-4xl font-extrabold text-navy-900">Built for your business, not a template</h2>
+      <p class="text-navy-600 mt-4 max-w-xl mx-auto text-lg">Every agent is custom-trained on your specific call scenarios, services, and tone.</p>
+    </div>
+
+    <!-- ── Flowchart industry cards ── -->
+    <div class="space-y-8">
+
+      <!-- ── DENTAL & HEALTHCARE ── -->
+      <div class="reveal ind-card bg-white border border-slate-200 rounded-3xl overflow-hidden cursor-default">
+        <!-- Header -->
+        <div class="bg-gradient-to-r from-sky-50 to-blue-50 border-b border-sky-100 px-8 py-5 flex items-center gap-4">
+          <div class="w-12 h-12 bg-sky-700 rounded-2xl flex items-center justify-center shadow-md flex-shrink-0">
+            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" class="w-6 h-6" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+          </div>
+          <div>
+            <h3 class="font-extrabold text-navy-900 text-xl">Dental &amp; Healthcare</h3>
+            <p class="text-sky-700 text-xs font-semibold mt-0.5">NHS &amp; Private Practices · Dental Groups · Clinics</p>
+          </div>
+        </div>
+        <!-- Scenarios -->
+        <div class="p-8">
+          <div class="grid md:grid-cols-2 gap-8">
+            <!-- Scenario A -->
+            <div class="scenario-col scenario-col-a">
+              <div class="flex items-center gap-2 mb-4">
+                <span class="sc-badge-a">A</span>
+                <span class="text-sm font-bold text-navy-900">Appointment Booking</span>
+              </div>
+              <div class="scenario-col scenario-col-b">
+                <div class="flow-node trigger">Patient calls the practice</div>
+                <div class="flow-arrow"><svg width="12" height="18" viewBox="0 0 12 18"><line x1="6" y1="0" x2="6" y2="12" stroke="#CBD5E1" stroke-width="1.5"/><path d="M2 12L6 17L10 12" stroke="#CBD5E1" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <div class="flow-node">Agent answers in &lt;1 second</div>
+                <div class="flow-arrow"><svg width="12" height="18" viewBox="0 0 12 18"><line x1="6" y1="0" x2="6" y2="12" stroke="#CBD5E1" stroke-width="1.5"/><path d="M2 12L6 17L10 12" stroke="#CBD5E1" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <div class="flow-node">NHS or private identified</div>
+                <div class="flow-arrow"><svg width="12" height="18" viewBox="0 0 12 18"><line x1="6" y1="0" x2="6" y2="12" stroke="#CBD5E1" stroke-width="1.5"/><path d="M2 12L6 17L10 12" stroke="#CBD5E1" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <div class="flow-node">Name, DOB &amp; symptoms captured</div>
+                <div class="flow-arrow"><svg width="12" height="18" viewBox="0 0 12 18"><line x1="6" y1="0" x2="6" y2="12" stroke="#CBD5E1" stroke-width="1.5"/><path d="M2 12L6 17L10 12" stroke="#CBD5E1" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <div class="flow-node success">✓ Appointment booked &amp; confirmed</div>
+              </div>
+            </div>
+            <!-- Scenario B -->
+            <div>
+              <div class="flex items-center gap-2 mb-4">
+                <span class="sc-badge-b-red">B</span>
+                <span class="text-sm font-bold text-navy-900">Dental Emergency</span>
+              </div>
+              <div>
+                <div class="flow-node trigger">Patient in pain calls practice</div>
+                <div class="flow-arrow"><svg width="12" height="18" viewBox="0 0 12 18"><line x1="6" y1="0" x2="6" y2="12" stroke="#CBD5E1" stroke-width="1.5"/><path d="M2 12L6 17L10 12" stroke="#CBD5E1" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <div class="flow-node">Agent answers in &lt;1 second</div>
+                <div class="flow-arrow"><svg width="12" height="18" viewBox="0 0 12 18"><line x1="6" y1="0" x2="6" y2="12" stroke="#CBD5E1" stroke-width="1.5"/><path d="M2 12L6 17L10 12" stroke="#CBD5E1" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <div class="flow-node warn">Emergency triage questions asked</div>
+                <div class="flow-arrow"><svg width="12" height="18" viewBox="0 0 12 18"><line x1="6" y1="0" x2="6" y2="12" stroke="#CBD5E1" stroke-width="1.5"/><path d="M2 12L6 17L10 12" stroke="#CBD5E1" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <div class="flow-node">Severity level assessed</div>
+                <div class="flow-arrow"><svg width="12" height="18" viewBox="0 0 12 18"><line x1="6" y1="0" x2="6" y2="12" stroke="#CBD5E1" stroke-width="1.5"/><path d="M2 12L6 17L10 12" stroke="#CBD5E1" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <div class="flow-node success">✓ Same-day slot booked / on-call notified</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Value metrics -->
+        <div class="bg-slate-50 border-t border-slate-100 px-8 py-5">
+          <p class="text-xs font-bold text-navy-600 uppercase tracking-widest mb-3">Key Value Metrics</p>
+          <div class="grid grid-cols-3 gap-4">
+            <div class="val-chip"><span class="v">£85+</span><span class="l">avg appointment value</span></div>
+            <div class="val-chip border-x border-slate-200 px-4"><span class="v">15+</span><span class="l">calls/day fully answered</span></div>
+            <div class="val-chip"><span class="v">£1,275+</span><span class="l">daily revenue protected</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── HAIR & BEAUTY ── -->
+      <div class="reveal ind-card bg-white border border-slate-200 rounded-3xl overflow-hidden cursor-default" style="transition-delay:60ms">
+        <div class="bg-gradient-to-r from-pink-50 to-rose-50 border-b border-pink-100 px-8 py-5 flex items-center gap-4">
+          <div class="w-12 h-12 bg-pink-600 rounded-2xl flex items-center justify-center shadow-md flex-shrink-0">
+            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" class="w-6 h-6" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </div>
+          <div>
+            <h3 class="font-extrabold text-navy-900 text-xl">Hair &amp; Beauty</h3>
+            <p class="text-pink-600 text-xs font-semibold mt-0.5">Salons · Barbershops · Nail Studios · Spas</p>
+          </div>
+        </div>
+        <div class="p-8">
+          <div class="grid md:grid-cols-2 gap-8">
+            <div>
+              <div class="flex items-center gap-2 mb-4">
+                <span class="sc-badge-a">A</span>
+                <span class="text-sm font-bold text-navy-900">New Booking Request</span>
+              </div>
+              <div>
+                <div class="flow-node trigger">Customer calls the salon</div>
+                <div class="flow-arrow"><svg width="12" height="18" viewBox="0 0 12 18"><line x1="6" y1="0" x2="6" y2="12" stroke="#CBD5E1" stroke-width="1.5"/><path d="M2 12L6 17L10 12" stroke="#CBD5E1" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <div class="flow-node">Agent answers in &lt;1 second</div>
+                <div class="flow-arrow"><svg width="12" height="18" viewBox="0 0 12 18"><line x1="6" y1="0" x2="6" y2="12" stroke="#CBD5E1" stroke-width="1.5"/><path d="M2 12L6 17L10 12" stroke="#CBD5E1" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <div class="flow-node">Service requested (cut, colour, etc.)</div>
+                <div class="flow-arrow"><svg width="12" height="18" viewBox="0 0 12 18"><line x1="6" y1="0" x2="6" y2="12" stroke="#CBD5E1" stroke-width="1.5"/><path d="M2 12L6 17L10 12" stroke="#CBD5E1" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <div class="flow-node">Stylist preference &amp; date noted</div>
+                <div class="flow-arrow"><svg width="12" height="18" viewBox="0 0 12 18"><line x1="6" y1="0" x2="6" y2="12" stroke="#CBD5E1" stroke-width="1.5"/><path d="M2 12L6 17L10 12" stroke="#CBD5E1" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <div class="flow-node success">✓ Booking confirmed + reminder set</div>
+              </div>
+            </div>
+            <div>
+              <div class="flex items-center gap-2 mb-4">
+                <span class="sc-badge-b-dark">B</span>
+                <span class="text-sm font-bold text-navy-900">After-Hours Enquiry</span>
+              </div>
+              <div>
+                <div class="flow-node trigger">Customer calls at 9pm (salon closed)</div>
+                <div class="flow-arrow"><svg width="12" height="18" viewBox="0 0 12 18"><line x1="6" y1="0" x2="6" y2="12" stroke="#CBD5E1" stroke-width="1.5"/><path d="M2 12L6 17L10 12" stroke="#CBD5E1" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <div class="flow-node">Agent answers immediately</div>
+                <div class="flow-arrow"><svg width="12" height="18" viewBox="0 0 12 18"><line x1="6" y1="0" x2="6" y2="12" stroke="#CBD5E1" stroke-width="1.5"/><path d="M2 12L6 17L10 12" stroke="#CBD5E1" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <div class="flow-node">Service &amp; preferred time captured</div>
+                <div class="flow-arrow"><svg width="12" height="18" viewBox="0 0 12 18"><line x1="6" y1="0" x2="6" y2="12" stroke="#CBD5E1" stroke-width="1.5"/><path d="M2 12L6 17L10 12" stroke="#CBD5E1" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <div class="flow-node">Contact details taken</div>
+                <div class="flow-arrow"><svg width="12" height="18" viewBox="0 0 12 18"><line x1="6" y1="0" x2="6" y2="12" stroke="#CBD5E1" stroke-width="1.5"/><path d="M2 12L6 17L10 12" stroke="#CBD5E1" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <div class="flow-node success">✓ Owner notified · Callback next morning</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="bg-slate-50 border-t border-slate-100 px-8 py-5">
+          <p class="text-xs font-bold text-navy-600 uppercase tracking-widest mb-3">Key Value Metrics</p>
+          <div class="grid grid-cols-3 gap-4">
+            <div class="val-chip"><span class="v">£50+</span><span class="l">avg booking value</span></div>
+            <div class="val-chip border-x border-slate-200 px-4"><span class="v">8 hrs</span><span class="l">out-of-hours coverage daily</span></div>
+            <div class="val-chip"><span class="v">0</span><span class="l">weekend bookings missed</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── LEGAL SERVICES ── -->
+      <div class="reveal ind-card bg-white border border-slate-200 rounded-3xl overflow-hidden cursor-default" style="transition-delay:100ms">
+        <div class="bg-gradient-to-r from-violet-50 to-purple-50 border-b border-violet-100 px-8 py-5 flex items-center gap-4">
+          <div class="w-12 h-12 bg-violet-700 rounded-2xl flex items-center justify-center shadow-md flex-shrink-0">
+            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" class="w-6 h-6" aria-hidden="true"><path d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 0 0 6.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 0 0 6.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"/></svg>
+          </div>
+          <div>
+            <h3 class="font-extrabold text-navy-900 text-xl">Legal Services</h3>
+            <p class="text-violet-600 text-xs font-semibold mt-0.5">Solicitors · Law Firms · Conveyancing · Employment Law</p>
+          </div>
+        </div>
+        <div class="p-8">
+          <div class="grid md:grid-cols-2 gap-8">
+            <div>
+              <div class="flex items-center gap-2 mb-4">
+                <span class="sc-badge-a">A</span>
+                <span class="text-sm font-bold text-navy-900">New Client Enquiry</span>
+              </div>
+              <div>
+                <div class="flow-node trigger">Prospect calls law firm</div>
+                <div class="flow-arrow"><svg width="12" height="18" viewBox="0 0 12 18"><line x1="6" y1="0" x2="6" y2="12" stroke="#CBD5E1" stroke-width="1.5"/><path d="M2 12L6 17L10 12" stroke="#CBD5E1" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <div class="flow-node">Agent answers in &lt;1 second</div>
+                <div class="flow-arrow"><svg width="12" height="18" viewBox="0 0 12 18"><line x1="6" y1="0" x2="6" y2="12" stroke="#CBD5E1" stroke-width="1.5"/><path d="M2 12L6 17L10 12" stroke="#CBD5E1" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <div class="flow-node">Legal area &amp; case type identified</div>
+                <div class="flow-arrow"><svg width="12" height="18" viewBox="0 0 12 18"><line x1="6" y1="0" x2="6" y2="12" stroke="#CBD5E1" stroke-width="1.5"/><path d="M2 12L6 17L10 12" stroke="#CBD5E1" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <div class="flow-node">Contact &amp; brief details captured</div>
+                <div class="flow-arrow"><svg width="12" height="18" viewBox="0 0 12 18"><line x1="6" y1="0" x2="6" y2="12" stroke="#CBD5E1" stroke-width="1.5"/><path d="M2 12L6 17L10 12" stroke="#CBD5E1" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <div class="flow-node success">✓ Consultation scheduled with right solicitor</div>
+              </div>
+            </div>
+            <div>
+              <div class="flex items-center gap-2 mb-4">
+                <span class="sc-badge-b">B</span>
+                <span class="text-sm font-bold text-navy-900">Urgent / Existing Client Call</span>
+              </div>
+              <div>
+                <div class="flow-node trigger">Client calls out of hours</div>
+                <div class="flow-arrow"><svg width="12" height="18" viewBox="0 0 12 18"><line x1="6" y1="0" x2="6" y2="12" stroke="#CBD5E1" stroke-width="1.5"/><path d="M2 12L6 17L10 12" stroke="#CBD5E1" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <div class="flow-node">Agent answers immediately</div>
+                <div class="flow-arrow"><svg width="12" height="18" viewBox="0 0 12 18"><line x1="6" y1="0" x2="6" y2="12" stroke="#CBD5E1" stroke-width="1.5"/><path d="M2 12L6 17L10 12" stroke="#CBD5E1" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <div class="flow-node warn">Urgency level assessed</div>
+                <div class="flow-arrow"><svg width="12" height="18" viewBox="0 0 12 18"><line x1="6" y1="0" x2="6" y2="12" stroke="#CBD5E1" stroke-width="1.5"/><path d="M2 12L6 17L10 12" stroke="#CBD5E1" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <div class="flow-node">Message &amp; details logged</div>
+                <div class="flow-arrow"><svg width="12" height="18" viewBox="0 0 12 18"><line x1="6" y1="0" x2="6" y2="12" stroke="#CBD5E1" stroke-width="1.5"/><path d="M2 12L6 17L10 12" stroke="#CBD5E1" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <div class="flow-node success">✓ Solicitor alerted / callback booked</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="bg-slate-50 border-t border-slate-100 px-8 py-5">
+          <p class="text-xs font-bold text-navy-600 uppercase tracking-widest mb-3">Key Value Metrics</p>
+          <div class="grid grid-cols-3 gap-4">
+            <div class="val-chip"><span class="v">£2k+</span><span class="l">avg new client value</span></div>
+            <div class="val-chip border-x border-slate-200 px-4"><span class="v">24/7</span><span class="l">lead capture, no gaps</span></div>
+            <div class="val-chip"><span class="v">100%</span><span class="l">urgent calls actioned</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── PROPERTY ── -->
+      <div class="reveal ind-card bg-white border border-slate-200 rounded-3xl overflow-hidden cursor-default" style="transition-delay:140ms">
+        <div class="bg-gradient-to-r from-slate-800 to-navy-900 border-b border-slate-700 px-8 py-5 flex items-center gap-4">
+          <div class="w-12 h-12 bg-sky-500 rounded-2xl flex items-center justify-center shadow-md flex-shrink-0">
+            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" class="w-6 h-6" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          </div>
+          <div>
+            <h3 class="font-extrabold text-white text-xl">Property &amp; Estate Agents</h3>
+            <p class="text-sky-300 text-xs font-semibold mt-0.5">Sales Agents · Letting Agencies · Property Management</p>
+          </div>
+        </div>
+        <div class="p-8">
+          <div class="grid md:grid-cols-2 gap-8">
+            <div>
+              <div class="flex items-center gap-2 mb-4">
+                <span class="sc-badge-a">A</span>
+                <span class="text-sm font-bold text-navy-900">Viewing Request</span>
+              </div>
+              <div>
+                <div class="flow-node trigger">Buyer / tenant calls to book viewing</div>
+                <div class="flow-arrow"><svg width="12" height="18" viewBox="0 0 12 18"><line x1="6" y1="0" x2="6" y2="12" stroke="#CBD5E1" stroke-width="1.5"/><path d="M2 12L6 17L10 12" stroke="#CBD5E1" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <div class="flow-node">Agent answers in &lt;1 second</div>
+                <div class="flow-arrow"><svg width="12" height="18" viewBox="0 0 12 18"><line x1="6" y1="0" x2="6" y2="12" stroke="#CBD5E1" stroke-width="1.5"/><path d="M2 12L6 17L10 12" stroke="#CBD5E1" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <div class="flow-node">Property &amp; availability confirmed</div>
+                <div class="flow-arrow"><svg width="12" height="18" viewBox="0 0 12 18"><line x1="6" y1="0" x2="6" y2="12" stroke="#CBD5E1" stroke-width="1.5"/><path d="M2 12L6 17L10 12" stroke="#CBD5E1" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <div class="flow-node">Contact &amp; preferred slot captured</div>
+                <div class="flow-arrow"><svg width="12" height="18" viewBox="0 0 12 18"><line x1="6" y1="0" x2="6" y2="12" stroke="#CBD5E1" stroke-width="1.5"/><path d="M2 12L6 17L10 12" stroke="#CBD5E1" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <div class="flow-node success">✓ Viewing booked + confirmation sent</div>
+              </div>
+            </div>
+            <div>
+              <div class="flex items-center gap-2 mb-4">
+                <span class="w-5 h-5 bg-red-500 rounded-full text-white text-xs font-bold flex items-center justify-center flex-shrink-0">B</span>
+                <span class="text-sm font-bold text-navy-900">Tenant Emergency</span>
+              </div>
+              <div>
+                <div class="flow-node trigger">Tenant calls with urgent issue</div>
+                <div class="flow-arrow"><svg width="12" height="18" viewBox="0 0 12 18"><line x1="6" y1="0" x2="6" y2="12" stroke="#CBD5E1" stroke-width="1.5"/><path d="M2 12L6 17L10 12" stroke="#CBD5E1" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <div class="flow-node">Agent answers immediately</div>
+                <div class="flow-arrow"><svg width="12" height="18" viewBox="0 0 12 18"><line x1="6" y1="0" x2="6" y2="12" stroke="#CBD5E1" stroke-width="1.5"/><path d="M2 12L6 17L10 12" stroke="#CBD5E1" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <div class="flow-node warn">Issue type &amp; severity assessed</div>
+                <div class="flow-arrow"><svg width="12" height="18" viewBox="0 0 12 18"><line x1="6" y1="0" x2="6" y2="12" stroke="#CBD5E1" stroke-width="1.5"/><path d="M2 12L6 17L10 12" stroke="#CBD5E1" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <div class="flow-node">Property address &amp; details logged</div>
+                <div class="flow-arrow"><svg width="12" height="18" viewBox="0 0 12 18"><line x1="6" y1="0" x2="6" y2="12" stroke="#CBD5E1" stroke-width="1.5"/><path d="M2 12L6 17L10 12" stroke="#CBD5E1" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <div class="flow-node success">✓ Emergency contractor notified / job logged</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="bg-slate-50 border-t border-slate-100 px-8 py-5">
+          <p class="text-xs font-bold text-navy-600 uppercase tracking-widest mb-3">Key Value Metrics</p>
+          <div class="grid grid-cols-3 gap-4">
+            <div class="val-chip"><span class="v">£3k+</span><span class="l">avg commission per sale</span></div>
+            <div class="val-chip border-x border-slate-200 px-4"><span class="v">100%</span><span class="l">weekend viewings captured</span></div>
+            <div class="val-chip"><span class="v">24/7</span><span class="l">tenant emergency coverage</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── RESTAURANTS ── -->
+      <div class="reveal ind-card bg-white border border-slate-200 rounded-3xl overflow-hidden cursor-default" style="transition-delay:180ms">
+        <div class="bg-gradient-to-r from-orange-50 to-amber-50 border-b border-orange-100 px-8 py-5 flex items-center gap-4">
+          <div class="w-12 h-12 bg-orange-600 rounded-2xl flex items-center justify-center shadow-md flex-shrink-0">
+            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" class="w-6 h-6" aria-hidden="true"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8zM6 1v3M10 1v3M14 1v3"/></svg>
+          </div>
+          <div>
+            <h3 class="font-extrabold text-navy-900 text-xl">Restaurants &amp; Hospitality</h3>
+            <p class="text-orange-600 text-xs font-semibold mt-0.5">Restaurants · Cafés · Bars · Event Venues · Hotels</p>
+          </div>
+        </div>
+        <div class="p-8">
+          <div class="grid md:grid-cols-2 gap-8">
+            <div>
+              <div class="flex items-center gap-2 mb-4">
+                <span class="sc-badge-a">A</span>
+                <span class="text-sm font-bold text-navy-900">Table Reservation</span>
+              </div>
+              <div>
+                <div class="flow-node trigger">Diner calls to book a table</div>
+                <div class="flow-arrow"><svg width="12" height="18" viewBox="0 0 12 18"><line x1="6" y1="0" x2="6" y2="12" stroke="#CBD5E1" stroke-width="1.5"/><path d="M2 12L6 17L10 12" stroke="#CBD5E1" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <div class="flow-node">Agent answers in &lt;1 second</div>
+                <div class="flow-arrow"><svg width="12" height="18" viewBox="0 0 12 18"><line x1="6" y1="0" x2="6" y2="12" stroke="#CBD5E1" stroke-width="1.5"/><path d="M2 12L6 17L10 12" stroke="#CBD5E1" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <div class="flow-node">Party size, date &amp; time captured</div>
+                <div class="flow-arrow"><svg width="12" height="18" viewBox="0 0 12 18"><line x1="6" y1="0" x2="6" y2="12" stroke="#CBD5E1" stroke-width="1.5"/><path d="M2 12L6 17L10 12" stroke="#CBD5E1" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <div class="flow-node">Dietary &amp; special requirements noted</div>
+                <div class="flow-arrow"><svg width="12" height="18" viewBox="0 0 12 18"><line x1="6" y1="0" x2="6" y2="12" stroke="#CBD5E1" stroke-width="1.5"/><path d="M2 12L6 17L10 12" stroke="#CBD5E1" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <div class="flow-node success">✓ Table confirmed + SMS reminder sent</div>
+              </div>
+            </div>
+            <div>
+              <div class="flex items-center gap-2 mb-4">
+                <span class="w-5 h-5 bg-amber-500 rounded-full text-white text-xs font-bold flex items-center justify-center flex-shrink-0">B</span>
+                <span class="text-sm font-bold text-navy-900">Private Event Enquiry</span>
+              </div>
+              <div>
+                <div class="flow-node trigger">Caller enquires about event hire</div>
+                <div class="flow-arrow"><svg width="12" height="18" viewBox="0 0 12 18"><line x1="6" y1="0" x2="6" y2="12" stroke="#CBD5E1" stroke-width="1.5"/><path d="M2 12L6 17L10 12" stroke="#CBD5E1" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <div class="flow-node">Agent answers immediately</div>
+                <div class="flow-arrow"><svg width="12" height="18" viewBox="0 0 12 18"><line x1="6" y1="0" x2="6" y2="12" stroke="#CBD5E1" stroke-width="1.5"/><path d="M2 12L6 17L10 12" stroke="#CBD5E1" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <div class="flow-node">Event type &amp; guest count captured</div>
+                <div class="flow-arrow"><svg width="12" height="18" viewBox="0 0 12 18"><line x1="6" y1="0" x2="6" y2="12" stroke="#CBD5E1" stroke-width="1.5"/><path d="M2 12L6 17L10 12" stroke="#CBD5E1" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <div class="flow-node">Preferred date &amp; budget noted</div>
+                <div class="flow-arrow"><svg width="12" height="18" viewBox="0 0 12 18"><line x1="6" y1="0" x2="6" y2="12" stroke="#CBD5E1" stroke-width="1.5"/><path d="M2 12L6 17L10 12" stroke="#CBD5E1" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <div class="flow-node success">✓ Enquiry logged · Events manager alerted</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="bg-slate-50 border-t border-slate-100 px-8 py-5">
+          <p class="text-xs font-bold text-navy-600 uppercase tracking-widest mb-3">Key Value Metrics</p>
+          <div class="grid grid-cols-3 gap-4">
+            <div class="val-chip"><span class="v">£45+</span><span class="l">avg cover value</span></div>
+            <div class="val-chip border-x border-slate-200 px-4"><span class="v">20%</span><span class="l">fewer no-shows with confirmation</span></div>
+            <div class="val-chip"><span class="v">£500+</span><span class="l">avg private event booking</span></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── More industries mini-grid ── -->
+    <div class="mt-12 reveal">
+      <p class="text-center text-xs font-bold text-navy-600 uppercase tracking-widest mb-6">Also deployed in these sectors</p>
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+        <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 text-center hover:border-sky-300 hover:shadow-md transition-all cursor-default">
+          <div class="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center mx-auto mb-2"><svg viewBox="0 0 24 24" fill="none" stroke="#065F46" stroke-width="2" class="w-5 h-5" aria-hidden="true"><path d="M18 8h2M4 8H2M18 16h2M4 16H2M6 8v8M18 8v8M6 12h12"/></svg></div>
+          <p class="text-xs font-semibold text-navy-800">Gyms &amp; Fitness</p>
+        </div>
+        <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 text-center hover:border-sky-300 hover:shadow-md transition-all cursor-default">
+          <div class="w-10 h-10 bg-teal-100 rounded-xl flex items-center justify-center mx-auto mb-2"><svg viewBox="0 0 24 24" fill="none" stroke="#0F766E" stroke-width="2" class="w-5 h-5" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+          <p class="text-xs font-semibold text-navy-800">Veterinary</p>
+        </div>
+        <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 text-center hover:border-sky-300 hover:shadow-md transition-all cursor-default">
+          <div class="w-10 h-10 bg-slate-200 rounded-xl flex items-center justify-center mx-auto mb-2"><svg viewBox="0 0 24 24" fill="none" stroke="#334155" stroke-width="2" class="w-5 h-5" aria-hidden="true"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 5v4h-7V8zM5.5 21a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zm13 0a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z"/></svg></div>
+          <p class="text-xs font-semibold text-navy-800">Auto &amp; Garages</p>
+        </div>
+        <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 text-center hover:border-sky-300 hover:shadow-md transition-all cursor-default">
+          <div class="w-10 h-10 bg-sky-100 rounded-xl flex items-center justify-center mx-auto mb-2"><svg viewBox="0 0 24 24" fill="none" stroke="#0369A1" stroke-width="2" class="w-5 h-5" aria-hidden="true"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
+          <p class="text-xs font-semibold text-navy-800">Physiotherapy</p>
+        </div>
+        <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 text-center hover:border-sky-300 hover:shadow-md transition-all cursor-default">
+          <div class="w-10 h-10 bg-indigo-100 rounded-xl flex items-center justify-center mx-auto mb-2"><svg viewBox="0 0 24 24" fill="none" stroke="#3730A3" stroke-width="2" class="w-5 h-5" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+          <p class="text-xs font-semibold text-navy-800">Recruitment</p>
+        </div>
+        <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 text-center hover:border-sky-300 hover:shadow-md transition-all cursor-default">
+          <div class="w-10 h-10 bg-violet-100 rounded-xl flex items-center justify-center mx-auto mb-2"><svg viewBox="0 0 24 24" fill="none" stroke="#6D28D9" stroke-width="2" class="w-5 h-5" aria-hidden="true"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+          <p class="text-xs font-semibold text-navy-800">Accountancy</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     WHY NBV — 3 DIFFERENTIATORS
+═══════════════════════════════════════ -->
+<section class="py-24 px-4 bg-navy-950 relative overflow-hidden">
+  <div class="absolute inset-0 grid-bg opacity-20" aria-hidden="true"></div>
+  <div class="blob" style="width:500px;height:500px;background:#0369A1;top:-100px;right:-100px;opacity:.12;animation:blobMove2 20s ease-in-out infinite;" aria-hidden="true"></div>
+  <div class="max-w-6xl mx-auto relative z-10">
+    <div class="text-center mb-16 reveal">
+      <p class="text-sky-400 font-semibold text-xs uppercase tracking-widest mb-3">Why Nothing But Value</p>
+      <h2 class="text-4xl font-extrabold text-white">Not a chatbot. Not a menu. A real conversation.</h2>
+    </div>
+    <div class="grid md:grid-cols-3 gap-8">
+      <div class="reveal tilt bg-white/5 border border-white/10 rounded-3xl p-8 hover:bg-white/8 transition-colors cursor-default">
+        <div class="w-16 h-16 bg-sky-700/30 border border-sky-600/40 rounded-2xl flex items-center justify-center mb-6">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#38BDF8" stroke-width="1.8" class="w-8 h-8" aria-hidden="true"><path d="M12 2a3 3 0 0 1 3 3v7a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v3M8 22h8"/></svg>
+        </div>
+        <h3 class="text-white font-bold text-xl mb-3">Human-quality voice</h3>
+        <p class="text-slate-400 text-sm leading-relaxed">Powered by ElevenLabs premium synthesis. Natural cadence, correct pauses, British accents. Most callers genuinely can't tell the difference.</p>
+      </div>
+      <div class="reveal tilt bg-white/5 border border-white/10 rounded-3xl p-8 hover:bg-white/8 transition-colors cursor-default" style="transition-delay:80ms">
+        <div class="w-16 h-16 bg-violet-700/30 border border-violet-600/40 rounded-2xl flex items-center justify-center mb-6">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#C084FC" stroke-width="1.8" class="w-8 h-8" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        </div>
+        <h3 class="text-white font-bold text-xl mb-3">Fully custom-built</h3>
+        <p class="text-slate-400 text-sm leading-relaxed">Every agent is built from scratch for your business — trained on your services, scenarios, and terminology. Not a generic template you configure yourself.</p>
+      </div>
+      <div class="reveal tilt bg-white/5 border border-white/10 rounded-3xl p-8 hover:bg-white/8 transition-colors cursor-default" style="transition-delay:160ms">
+        <div class="w-16 h-16 bg-emerald-700/30 border border-emerald-600/40 rounded-2xl flex items-center justify-center mb-6">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#34D399" stroke-width="1.8" class="w-8 h-8" aria-hidden="true"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+        </div>
+        <h3 class="text-white font-bold text-xl mb-3">Done-for-you delivery</h3>
+        <p class="text-slate-400 text-sm leading-relaxed">We write the script, build the agent, test every scenario, and go live — all in 5 days. You approve and it's done. Zero technical involvement required.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     RESULTS
+═══════════════════════════════════════ -->
+<section id="results" class="py-24 px-4 bg-white">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-16 reveal">
+      <p class="text-sky-700 font-semibold text-xs uppercase tracking-widest mb-3">Results</p>
+      <h2 class="text-4xl font-extrabold text-navy-900">The numbers from our live deployments</h2>
+    </div>
+
+    <!-- KPI counters -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
+      <div class="reveal text-center bg-slate-50 border border-slate-200 rounded-2xl p-6">
+        <p class="text-5xl font-extrabold gt counter" data-target="100" data-suffix="%">0</p>
+        <p class="text-navy-600 text-sm mt-2 font-medium">Calls answered</p>
+        <div class="prog-bar mt-3"><div class="prog-fill" data-width="100"></div></div>
+      </div>
+      <div class="reveal text-center bg-slate-50 border border-slate-200 rounded-2xl p-6" style="transition-delay:80ms">
+        <p class="text-5xl font-extrabold gt"><span class="counter" data-target="40" data-suffix="%">0</span></p>
+        <p class="text-navy-600 text-sm mt-2 font-medium">Avg. revenue increase</p>
+        <div class="prog-bar mt-3"><div class="prog-fill" data-width="40"></div></div>
+      </div>
+      <div class="reveal text-center bg-slate-50 border border-slate-200 rounded-2xl p-6" style="transition-delay:160ms">
+        <p class="text-5xl font-extrabold gt"><span class="counter" data-target="5">0</span> days</p>
+        <p class="text-navy-600 text-sm mt-2 font-medium">Average go-live time</p>
+        <div class="prog-bar mt-3"><div class="prog-fill" data-width="50"></div></div>
+      </div>
+      <div class="reveal text-center bg-slate-50 border border-slate-200 rounded-2xl p-6" style="transition-delay:240ms">
+        <p class="text-5xl font-extrabold gt">24/7</p>
+        <p class="text-navy-600 text-sm mt-2 font-medium">Uptime, every day</p>
+        <div class="prog-bar mt-3"><div class="prog-fill" data-width="100"></div></div>
+      </div>
+    </div>
+
+    <!-- Testimonials -->
+    <div class="grid md:grid-cols-2 gap-6">
+      <div class="reveal tilt bg-navy-900 rounded-3xl p-8 cursor-default">
+        <div class="flex gap-1 mb-4" aria-label="5 out of 5 stars">
+          <svg viewBox="0 0 20 20" fill="#FBBF24" class="w-5 h-5" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 0 0 .95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 0 0-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 0 0-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 0 0-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 0 0 .951-.69l1.07-3.292z"/></svg>
+          <svg viewBox="0 0 20 20" fill="#FBBF24" class="w-5 h-5" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 0 0 .95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 0 0-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 0 0-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 0 0-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 0 0 .951-.69l1.07-3.292z"/></svg>
+          <svg viewBox="0 0 20 20" fill="#FBBF24" class="w-5 h-5" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 0 0 .95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 0 0-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 0 0-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 0 0-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 0 0 .951-.69l1.07-3.292z"/></svg>
+          <svg viewBox="0 0 20 20" fill="#FBBF24" class="w-5 h-5" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 0 0 .95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 0 0-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 0 0-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 0 0-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 0 0 .951-.69l1.07-3.292z"/></svg>
+          <svg viewBox="0 0 20 20" fill="#FBBF24" class="w-5 h-5" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 0 0 .95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 0 0-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 0 0-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 0 0-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 0 0 .951-.69l1.07-3.292z"/></svg>
+        </div>
+        <blockquote class="text-slate-200 text-base leading-relaxed mb-6 italic">"The agent answers every call perfectly — even at 11pm on a Sunday. We haven't missed a booking since it went live. The ROI paid for itself in the first week."</blockquote>
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-sky-700 flex items-center justify-center text-white font-bold text-sm" aria-hidden="true">H</div>
+          <div>
+            <p class="text-white font-semibold text-sm">Hair &amp; Beauty Salon Owner</p>
+            <p class="text-slate-400 text-xs">South West England</p>
+          </div>
+        </div>
+      </div>
+      <div class="reveal tilt bg-navy-900 rounded-3xl p-8 cursor-default" style="transition-delay:80ms">
+        <div class="flex gap-1 mb-4" aria-label="5 out of 5 stars">
+          <svg viewBox="0 0 20 20" fill="#FBBF24" class="w-5 h-5" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 0 0 .95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 0 0-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 0 0-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 0 0-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 0 0 .951-.69l1.07-3.292z"/></svg>
+          <svg viewBox="0 0 20 20" fill="#FBBF24" class="w-5 h-5" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 0 0 .95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 0 0-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 0 0-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 0 0-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 0 0 .951-.69l1.07-3.292z"/></svg>
+          <svg viewBox="0 0 20 20" fill="#FBBF24" class="w-5 h-5" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 0 0 .95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 0 0-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 0 0-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 0 0-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 0 0 .951-.69l1.07-3.292z"/></svg>
+          <svg viewBox="0 0 20 20" fill="#FBBF24" class="w-5 h-5" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 0 0 .95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 0 0-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 0 0-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 0 0-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 0 0 .951-.69l1.07-3.292z"/></svg>
+          <svg viewBox="0 0 20 20" fill="#FBBF24" class="w-5 h-5" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 0 0 .95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 0 0-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 0 0-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 0 0-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 0 0 .951-.69l1.07-3.292z"/></svg>
+        </div>
+        <blockquote class="text-slate-200 text-base leading-relaxed mb-6 italic">"We were sceptical but they built us a live demo in under a week. The agent knows our services, our team, and handles every call exactly how we would. Genuinely impressive."</blockquote>
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-violet-600 flex items-center justify-center text-white font-bold text-sm" aria-hidden="true">D</div>
+          <div>
+            <p class="text-white font-semibold text-sm">Practice Manager, Dental Group</p>
+            <p class="text-slate-400 text-xs">Cambridgeshire</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     PRICING
+═══════════════════════════════════════ -->
+<section id="pricing" class="py-24 px-4 bg-slate-50 grid-bg">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-16 reveal">
+      <p class="text-sky-700 font-semibold text-xs uppercase tracking-widest mb-3">Pricing</p>
+      <h2 class="text-4xl font-extrabold text-navy-900">Simple, transparent pricing</h2>
+      <p class="text-navy-600 mt-4 max-w-xl mx-auto text-lg">No hidden fees. No long contracts. Cancel any time.</p>
+    </div>
+    <div class="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+
+      <!-- Starter -->
+      <div class="reveal tilt bg-white border border-slate-200 rounded-3xl p-8 flex flex-col hover:shadow-lg transition-shadow cursor-default">
+        <h3 class="font-bold text-navy-900 text-xl mb-1">Starter</h3>
+        <p class="text-navy-600 text-sm mb-6">Perfect for single-location businesses</p>
+        <p class="mb-6"><span class="text-4xl font-extrabold text-navy-900">£449</span><span class="text-navy-600 text-sm">/mo</span></p>
+        <ul class="space-y-3 mb-8 flex-1 text-sm">
+          <li class="flex items-center gap-2 text-navy-700"><svg viewBox="0 0 20 20" fill="#0369A1" class="w-5 h-5 flex-shrink-0" aria-hidden="true"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 0 1 0 1.414l-8 8a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 1.414-1.414L8 12.586l7.293-7.293a1 1 0 0 1 1.414 0z"/></svg>1 AI voice agent</li>
+          <li class="flex items-center gap-2 text-navy-700"><svg viewBox="0 0 20 20" fill="#0369A1" class="w-5 h-5 flex-shrink-0" aria-hidden="true"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 0 1 0 1.414l-8 8a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 1.414-1.414L8 12.586l7.293-7.293a1 1 0 0 1 1.414 0z"/></svg>Dedicated UK phone number</li>
+          <li class="flex items-center gap-2 text-navy-700"><svg viewBox="0 0 20 20" fill="#0369A1" class="w-5 h-5 flex-shrink-0" aria-hidden="true"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 0 1 0 1.414l-8 8a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 1.414-1.414L8 12.586l7.293-7.293a1 1 0 0 1 1.414 0z"/></svg>Up to 3 call scenarios</li>
+          <li class="flex items-center gap-2 text-navy-700"><svg viewBox="0 0 20 20" fill="#0369A1" class="w-5 h-5 flex-shrink-0" aria-hidden="true"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 0 1 0 1.414l-8 8a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 1.414-1.414L8 12.586l7.293-7.293a1 1 0 0 1 1.414 0z"/></svg>Monthly call log report</li>
+          <li class="flex items-center gap-2 text-navy-700"><svg viewBox="0 0 20 20" fill="#0369A1" class="w-5 h-5 flex-shrink-0" aria-hidden="true"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 0 1 0 1.414l-8 8a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 1.414-1.414L8 12.586l7.293-7.293a1 1 0 0 1 1.414 0z"/></svg>Email support</li>
+        </ul>
+        <a href="#contact" class="block text-center border border-sky-700 text-sky-700 font-semibold py-3.5 rounded-xl hover:bg-sky-50 transition-colors cursor-pointer">Get Started</a>
+      </div>
+
+      <!-- Growth -->
+      <div class="reveal tilt border-2 border-sky-700 bg-white rounded-3xl p-8 flex flex-col relative shadow-2xl shadow-sky-100 cursor-default" style="transition-delay:80ms">
+        <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-sky-700 text-white text-xs font-bold px-4 py-1 rounded-full shadow-sm">Most Popular</div>
+        <h3 class="font-bold text-navy-900 text-xl mb-1">Growth</h3>
+        <p class="text-navy-600 text-sm mb-6">For growing businesses with multiple needs</p>
+        <p class="mb-6"><span class="text-4xl font-extrabold text-navy-900">£749</span><span class="text-navy-600 text-sm">/mo</span></p>
+        <ul class="space-y-3 mb-8 flex-1 text-sm">
+          <li class="flex items-center gap-2 text-navy-700"><svg viewBox="0 0 20 20" fill="#0369A1" class="w-5 h-5 flex-shrink-0" aria-hidden="true"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 0 1 0 1.414l-8 8a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 1.414-1.414L8 12.586l7.293-7.293a1 1 0 0 1 1.414 0z"/></svg>2 AI voice agents</li>
+          <li class="flex items-center gap-2 text-navy-700"><svg viewBox="0 0 20 20" fill="#0369A1" class="w-5 h-5 flex-shrink-0" aria-hidden="true"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 0 1 0 1.414l-8 8a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 1.414-1.414L8 12.586l7.293-7.293a1 1 0 0 1 1.414 0z"/></svg>2 dedicated UK numbers</li>
+          <li class="flex items-center gap-2 text-navy-700"><svg viewBox="0 0 20 20" fill="#0369A1" class="w-5 h-5 flex-shrink-0" aria-hidden="true"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 0 1 0 1.414l-8 8a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 1.414-1.414L8 12.586l7.293-7.293a1 1 0 0 1 1.414 0z"/></svg>Up to 7 call scenarios</li>
+          <li class="flex items-center gap-2 text-navy-700"><svg viewBox="0 0 20 20" fill="#0369A1" class="w-5 h-5 flex-shrink-0" aria-hidden="true"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 0 1 0 1.414l-8 8a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 1.414-1.414L8 12.586l7.293-7.293a1 1 0 0 1 1.414 0z"/></svg>CRM / calendar integration</li>
+          <li class="flex items-center gap-2 text-navy-700"><svg viewBox="0 0 20 20" fill="#0369A1" class="w-5 h-5 flex-shrink-0" aria-hidden="true"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 0 1 0 1.414l-8 8a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 1.414-1.414L8 12.586l7.293-7.293a1 1 0 0 1 1.414 0z"/></svg>Weekly performance report</li>
+          <li class="flex items-center gap-2 text-navy-700"><svg viewBox="0 0 20 20" fill="#0369A1" class="w-5 h-5 flex-shrink-0" aria-hidden="true"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 0 1 0 1.414l-8 8a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 1.414-1.414L8 12.586l7.293-7.293a1 1 0 0 1 1.414 0z"/></svg>Priority support</li>
+        </ul>
+        <a href="#contact" class="block text-center bg-sky-700 text-white font-semibold py-3.5 rounded-xl hover:bg-sky-600 transition-colors cursor-pointer shadow-md">Get Started</a>
+      </div>
+
+      <!-- Enterprise -->
+      <div class="reveal tilt bg-white border border-slate-200 rounded-3xl p-8 flex flex-col hover:shadow-lg transition-shadow cursor-default" style="transition-delay:160ms">
+        <h3 class="font-bold text-navy-900 text-xl mb-1">Enterprise</h3>
+        <p class="text-navy-600 text-sm mb-6">Multi-location &amp; custom integrations</p>
+        <p class="mb-6"><span class="text-4xl font-extrabold text-navy-900">Custom</span></p>
+        <ul class="space-y-3 mb-8 flex-1 text-sm">
+          <li class="flex items-center gap-2 text-navy-700"><svg viewBox="0 0 20 20" fill="#0369A1" class="w-5 h-5 flex-shrink-0" aria-hidden="true"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 0 1 0 1.414l-8 8a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 1.414-1.414L8 12.586l7.293-7.293a1 1 0 0 1 1.414 0z"/></svg>Unlimited agents</li>
+          <li class="flex items-center gap-2 text-navy-700"><svg viewBox="0 0 20 20" fill="#0369A1" class="w-5 h-5 flex-shrink-0" aria-hidden="true"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 0 1 0 1.414l-8 8a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 1.414-1.414L8 12.586l7.293-7.293a1 1 0 0 1 1.414 0z"/></svg>Custom API integrations</li>
+          <li class="flex items-center gap-2 text-navy-700"><svg viewBox="0 0 20 20" fill="#0369A1" class="w-5 h-5 flex-shrink-0" aria-hidden="true"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 0 1 0 1.414l-8 8a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 1.414-1.414L8 12.586l7.293-7.293a1 1 0 0 1 1.414 0z"/></svg>Bespoke voice &amp; personality</li>
+          <li class="flex items-center gap-2 text-navy-700"><svg viewBox="0 0 20 20" fill="#0369A1" class="w-5 h-5 flex-shrink-0" aria-hidden="true"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 0 1 0 1.414l-8 8a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 1.414-1.414L8 12.586l7.293-7.293a1 1 0 0 1 1.414 0z"/></svg>Dedicated account manager</li>
+          <li class="flex items-center gap-2 text-navy-700"><svg viewBox="0 0 20 20" fill="#0369A1" class="w-5 h-5 flex-shrink-0" aria-hidden="true"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 0 1 0 1.414l-8 8a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 1.414-1.414L8 12.586l7.293-7.293a1 1 0 0 1 1.414 0z"/></svg>SLA &amp; full onboarding</li>
+        </ul>
+        <a href="#contact" class="block text-center border border-sky-700 text-sky-700 font-semibold py-3.5 rounded-xl hover:bg-sky-50 transition-colors cursor-pointer">Talk to Us</a>
+      </div>
+    </div>
+    <p class="text-center text-navy-600 text-sm mt-8 reveal">All plans include a <strong>one-time setup fee</strong> and a <strong>7-day live demo</strong> — hear the agent working before you commit.</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     FAQ
+═══════════════════════════════════════ -->
+<section class="py-24 px-4 bg-white">
+  <div class="max-w-3xl mx-auto">
+    <div class="text-center mb-12 reveal">
+      <p class="text-sky-700 font-semibold text-xs uppercase tracking-widest mb-3">FAQ</p>
+      <h2 class="text-4xl font-extrabold text-navy-900">Common questions</h2>
+    </div>
+    <div class="space-y-3">
+      <details class="reveal group bg-slate-50 border border-slate-200 rounded-2xl overflow-hidden">
+        <summary class="flex items-center justify-between px-6 py-5 cursor-pointer font-semibold text-navy-900 hover:bg-slate-100 transition-colors">
+          Will it sound robotic or artificial?
+          <svg viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 text-sky-700 flex-shrink-0" aria-hidden="true"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 0 1 1.414 0L10 10.586l3.293-3.293a1 1 0 1 1 1.414 1.414l-4 4a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 0-1.414z"/></svg>
+        </summary>
+        <div class="px-6 pb-5 text-navy-600 text-sm leading-relaxed">No. We use ElevenLabs premium voice synthesis to produce natural, conversational British English. Most callers genuinely can't tell the difference. You'll hear a live demo call before we go live.</div>
+      </details>
+      <details class="reveal group bg-slate-50 border border-slate-200 rounded-2xl overflow-hidden" style="transition-delay:50ms">
+        <summary class="flex items-center justify-between px-6 py-5 cursor-pointer font-semibold text-navy-900 hover:bg-slate-100 transition-colors">
+          What if the agent can't answer a question?
+          <svg viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 text-sky-700 flex-shrink-0" aria-hidden="true"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 0 1 1.414 0L10 10.586l3.293-3.293a1 1 0 1 1 1.414 1.414l-4 4a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 0-1.414z"/></svg>
+        </summary>
+        <div class="px-6 pb-5 text-navy-600 text-sm leading-relaxed">The agent is trained to gracefully offer a callback or transfer to a real person if the enquiry falls outside its scope. No caller is ever left confused or abandoned.</div>
+      </details>
+      <details class="reveal group bg-slate-50 border border-slate-200 rounded-2xl overflow-hidden" style="transition-delay:100ms">
+        <summary class="flex items-center justify-between px-6 py-5 cursor-pointer font-semibold text-navy-900 hover:bg-slate-100 transition-colors">
+          Do I need any technical knowledge?
+          <svg viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 text-sky-700 flex-shrink-0" aria-hidden="true"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 0 1 1.414 0L10 10.586l3.293-3.293a1 1 0 1 1 1.414 1.414l-4 4a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 0-1.414z"/></svg>
+        </summary>
+        <div class="px-6 pb-5 text-navy-600 text-sm leading-relaxed">None whatsoever. We handle everything from script to go-live. You approve the agent and take the calls — that's it.</div>
+      </details>
+      <details class="reveal group bg-slate-50 border border-slate-200 rounded-2xl overflow-hidden" style="transition-delay:150ms">
+        <summary class="flex items-center justify-between px-6 py-5 cursor-pointer font-semibold text-navy-900 hover:bg-slate-100 transition-colors">
+          Can I keep my existing phone number?
+          <svg viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 text-sky-700 flex-shrink-0" aria-hidden="true"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 0 1 1.414 0L10 10.586l3.293-3.293a1 1 0 1 1 1.414 1.414l-4 4a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 0-1.414z"/></svg>
+        </summary>
+        <div class="px-6 pb-5 text-navy-600 text-sm leading-relaxed">Yes. We provide a dedicated line you can either promote directly or forward your existing number to. Number porting is also available.</div>
+      </details>
+      <details class="reveal group bg-slate-50 border border-slate-200 rounded-2xl overflow-hidden" style="transition-delay:200ms">
+        <summary class="flex items-center justify-between px-6 py-5 cursor-pointer font-semibold text-navy-900 hover:bg-slate-100 transition-colors">
+          What's the contract length?
+          <svg viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 text-sky-700 flex-shrink-0" aria-hidden="true"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 0 1 1.414 0L10 10.586l3.293-3.293a1 1 0 1 1 1.414 1.414l-4 4a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 0-1.414z"/></svg>
+        </summary>
+        <div class="px-6 pb-5 text-navy-600 text-sm leading-relaxed">Month-to-month, no lock-in. Most clients stay because it works — not because they're contractually obligated to.</div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     CTA BANNER
+═══════════════════════════════════════ -->
+<section class="py-20 px-4 bg-sky-700 relative overflow-hidden">
+  <div class="absolute inset-0 grid-bg opacity-10" aria-hidden="true"></div>
+  <div class="blob" style="width:400px;height:400px;background:#fff;top:-100px;left:-100px;opacity:.04;" aria-hidden="true"></div>
+  <div class="max-w-3xl mx-auto text-center relative z-10 reveal">
+    <h2 class="text-4xl font-extrabold text-white mb-4">Ready to stop missing calls?</h2>
+    <p class="text-sky-100 text-lg mb-8">We'll build a live demo agent for your business at no cost — hear it before you commit.</p>
+    <a href="#contact" class="inline-flex items-center gap-2 bg-white text-sky-700 font-bold text-base px-10 py-4 rounded-xl hover:bg-sky-50 transition-colors cursor-pointer shadow-xl">
+      Book My Free Demo
+      <svg viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4" aria-hidden="true"><path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793L10.146 4.354a.5.5 0 1 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/></svg>
+    </a>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     CONTACT
+═══════════════════════════════════════ -->
+<section id="contact" class="py-24 px-4 bg-white">
+  <div class="max-w-3xl mx-auto">
+    <div class="text-center mb-12 reveal">
+      <p class="text-sky-700 font-semibold text-xs uppercase tracking-widest mb-3">Get Started</p>
+      <h2 class="text-4xl font-extrabold text-navy-900">Book your free demo call</h2>
+      <p class="text-navy-600 mt-4 text-lg">We'll build a custom live demo for your business — completely free — so you can hear it before committing to anything.</p>
+    </div>
+    <div class="reveal bg-slate-50 border border-slate-200 rounded-3xl p-8 md:p-10">
+      <form id="contact-form" class="space-y-5" novalidate>
+        <div class="grid md:grid-cols-2 gap-5">
+          <div>
+            <label for="name" class="block text-sm font-medium text-navy-800 mb-1.5">Your name <span class="text-red-500" aria-hidden="true">*</span></label>
+            <input id="name" name="name" type="text" required autocomplete="name" placeholder="Jane Smith"
+              class="w-full border border-slate-300 rounded-xl px-4 py-3 text-sm text-navy-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-colors bg-white" />
+          </div>
+          <div>
+            <label for="business" class="block text-sm font-medium text-navy-800 mb-1.5">Business name <span class="text-red-500" aria-hidden="true">*</span></label>
+            <input id="business" name="business" type="text" required placeholder="Acme Dental Practice"
+              class="w-full border border-slate-300 rounded-xl px-4 py-3 text-sm text-navy-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-colors bg-white" />
+          </div>
+        </div>
+        <div>
+          <label for="email" class="block text-sm font-medium text-navy-800 mb-1.5">Email <span class="text-red-500" aria-hidden="true">*</span></label>
+          <input id="email" name="email" type="email" required autocomplete="email" placeholder="jane@yourbusiness.co.uk"
+            class="w-full border border-slate-300 rounded-xl px-4 py-3 text-sm text-navy-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-colors bg-white" />
+        </div>
+        <div>
+          <label for="phone" class="block text-sm font-medium text-navy-800 mb-1.5">Phone number</label>
+          <input id="phone" name="phone" type="tel" autocomplete="tel" placeholder="+44 7700 900000"
+            class="w-full border border-slate-300 rounded-xl px-4 py-3 text-sm text-navy-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-colors bg-white" />
+        </div>
+        <div>
+          <label for="industry" class="block text-sm font-medium text-navy-800 mb-1.5">Industry</label>
+          <select id="industry" name="industry"
+            class="w-full border border-slate-300 rounded-xl px-4 py-3 text-sm text-navy-900 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-colors bg-white cursor-pointer">
+            <option value="">Select your industry…</option>
+            <option>Dental / Healthcare</option>
+            <option>Hair &amp; Beauty</option>
+            <option>Legal Services</option>
+            <option>Property / Estate Agency</option>
+            <option>Restaurant / Hospitality</option>
+            <option>Fitness / Gym</option>
+            <option>Veterinary</option>
+            <option>Auto / Garage</option>
+            <option>Accountancy / Finance</option>
+            <option>Recruitment</option>
+            <option>Physiotherapy / Private Healthcare</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div>
+          <label for="message" class="block text-sm font-medium text-navy-800 mb-1.5">Biggest call handling challenge?</label>
+          <textarea id="message" name="message" rows="3" placeholder="Tell us what's costing you the most…"
+            class="w-full border border-slate-300 rounded-xl px-4 py-3 text-sm text-navy-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-colors bg-white resize-none"></textarea>
+        </div>
+        <button type="submit" id="submit-btn"
+          class="w-full bg-sky-700 text-white font-bold py-4 rounded-xl hover:bg-sky-600 transition-colors cursor-pointer text-base flex items-center justify-center gap-2 shadow-md">
+          <span id="btn-text">Book My Free Demo</span>
+          <svg id="btn-spinner" class="hidden w-5 h-5 animate-spin" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10" stroke="white" stroke-width="3" stroke-dasharray="30 60"/></svg>
+        </button>
+        <p id="form-success" class="hidden text-center text-emerald-700 font-medium text-sm pt-1">Thanks! We'll be in touch within 24 hours.</p>
+        <p id="form-error"   class="hidden text-center text-red-600 text-sm pt-1">Please fill in all required fields.</p>
+      </form>
+    </div>
+    <div class="mt-8 flex flex-col sm:flex-row gap-3 justify-center reveal">
+      <a href="mailto:ceo@nothingbutvalue.com" class="flex items-center justify-center gap-2 bg-slate-100 border border-slate-200 text-navy-800 font-medium text-sm px-6 py-3 rounded-xl hover:bg-slate-200 transition-colors cursor-pointer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        ceo@nothingbutvalue.com
+      </a>
+      <a href="tel:+447769286772" class="flex items-center justify-center gap-2 bg-slate-100 border border-slate-200 text-navy-800 font-medium text-sm px-6 py-3 rounded-xl hover:bg-slate-200 transition-colors cursor-pointer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.37h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 9a16 16 0 0 0 6.09 6.09l1.95-1.95a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        +44 7769 286772
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="bg-navy-950 text-slate-500 py-10 px-4">
+  <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-xs">
+    <div class="flex items-center gap-2">
+      <div class="w-6 h-6 bg-sky-700 rounded-lg flex items-center justify-center" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" class="w-3.5 h-3.5"><path d="M12 2a3 3 0 0 1 3 3v7a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v3M8 22h8"/></svg>
+      </div>
+      <div>
+        <span class="text-white font-extrabold text-sm">myaivoiceagent<span class="text-sky-400">.co</span></span>
+        <p class="text-slate-500 text-[10px] mt-0.5">by Nothing But Value</p>
+      </div>
+    </div>
+    <p>AI Voice Agents for UK businesses — <a href="mailto:ceo@nothingbutvalue.com" class="hover:text-white transition-colors">ceo@nothingbutvalue.com</a></p>
+    <p>&copy; 2025 myaivoiceagent.co · Nothing But Value Ltd. All rights reserved.</p>
+  </div>
+</footer>
+
+<!-- ═══════════════════════════════════════
+     JAVASCRIPT
+═══════════════════════════════════════ -->
+<script>
+// ── Mobile menu ──
+const menuBtn = document.getElementById('menu-btn');
+const mobileMenu = document.getElementById('mobile-menu');
+menuBtn.addEventListener('click', () => {
+  const isHidden = mobileMenu.classList.toggle('hidden');
+  menuBtn.setAttribute('aria-expanded', String(!isHidden));
+});
+mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+  mobileMenu.classList.add('hidden');
+  menuBtn.setAttribute('aria-expanded', 'false');
+}));
+
+// ── Dark footer ticker ──
+const tickerItems = [
+  'Dental Practices','Hair & Beauty Salons','Law Firms','Estate Agents',
+  'Vet Clinics','Restaurants','Gyms & Fitness','Auto Garages',
+  'Accountancy Firms','Physiotherapy Clinics','Recruitment Agencies','Private Healthcare'
+];
+const inner = document.getElementById('ticker-inner');
+const makeItems = () => tickerItems.map(t =>
+  `<span class="mx-8 text-sm text-slate-400 font-medium">${t}</span><span class="mx-2 text-sky-600" aria-hidden="true">•</span>`
+).join('');
+inner.innerHTML = makeItems() + makeItems();
+
+// ── Hero chip ticker ──
+const heroChipColors = [
+  ['bg-sky-100 text-sky-700 border-sky-200','Dental Practices'],
+  ['bg-pink-100 text-pink-700 border-pink-200','Hair & Beauty'],
+  ['bg-violet-100 text-violet-700 border-violet-200','Legal Services'],
+  ['bg-slate-200 text-slate-700 border-slate-300','Estate Agents'],
+  ['bg-orange-100 text-orange-700 border-orange-200','Restaurants'],
+  ['bg-emerald-100 text-emerald-700 border-emerald-200','Gyms & Fitness'],
+  ['bg-teal-100 text-teal-700 border-teal-200','Vet Clinics'],
+  ['bg-amber-100 text-amber-700 border-amber-200','Auto Garages'],
+  ['bg-indigo-100 text-indigo-700 border-indigo-200','Accountancy'],
+  ['bg-red-100 text-red-700 border-red-200','Physiotherapy'],
+  ['bg-sky-100 text-sky-700 border-sky-200','Recruitment'],
+];
+const heroChip = document.getElementById('hero-chip-ticker');
+const makeChips = () => heroChipColors.map(([cls, label]) =>
+  `<span class="inline-flex items-center gap-1.5 whitespace-nowrap border text-xs font-semibold px-3 py-1.5 rounded-full mr-2 ${cls}">
+    <span class="w-1.5 h-1.5 rounded-full bg-current opacity-70 inline-block flex-shrink-0" aria-hidden="true"></span>${label}
+  </span>`
+).join('');
+heroChip.innerHTML = makeChips() + makeChips();
+
+// ── Waveform ──
+const wc = document.getElementById('waveform-container');
+const barCount = 20;
+for (let i = 0; i < barCount; i++) {
+  const d = document.createElement('div');
+  d.className = 'wbar';
+  d.style.animationDelay = `${(i * 60) % 1100}ms`;
+  d.style.height = '48px';
+  wc.appendChild(d);
+}
+
+// ── Call timer ──
+let seconds = 0;
+const timerEl = document.getElementById('call-timer');
+setInterval(() => {
+  seconds++;
+  const m = String(Math.floor(seconds / 60)).padStart(2, '0');
+  const s = String(seconds % 60).padStart(2, '0');
+  timerEl.textContent = `${m}:${s}`;
+}, 1000);
+
+// ── Floating toasts ──
+setTimeout(() => {
+  const t1 = document.getElementById('toast-1');
+  t1.classList.remove('hidden');
+  t1.classList.add('notif');
+}, 1400);
+setTimeout(() => {
+  const t2 = document.getElementById('toast-2');
+  t2.classList.remove('hidden');
+  t2.classList.add('notif');
+}, 3000);
+
+// ── Typewriter ──
+const words = ['Dental Practice','Hair Salon','Law Firm','Estate Agency','Vet Clinic','Restaurant','Gym','Accountancy Firm'];
+let wi = 0, ci = 0, deleting = false;
+const tw = document.getElementById('typewriter');
+function type() {
+  const word = words[wi];
+  tw.textContent = deleting ? word.slice(0, ci--) : word.slice(0, ci++);
+  if (!deleting && ci > word.length) { setTimeout(() => { deleting = true; type(); }, 1800); return; }
+  if (deleting && ci < 0) { deleting = false; wi = (wi + 1) % words.length; ci = 0; }
+  setTimeout(type, deleting ? 55 : 95);
+}
+type();
+
+// ── 3D card tilt ──
+document.querySelectorAll('.tilt').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const r = card.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width - 0.5;
+    const y = (e.clientY - r.top) / r.height - 0.5;
+    card.style.transform = `perspective(900px) rotateY(${x*7}deg) rotateX(${-y*7}deg) translateZ(8px)`;
+  });
+  card.addEventListener('mouseleave', () => { card.style.transform = ''; });
+});
+
+// ── Scroll reveal + counters + progress bars ──
+const reveals = document.querySelectorAll('.reveal');
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    e.target.classList.add('visible');
+    // counters
+    e.target.querySelectorAll('.counter[data-target]').forEach(el => {
+      animateCounter(el, +el.dataset.target, el.dataset.suffix || '');
+    });
+    // progress bars
+    e.target.querySelectorAll('.prog-fill[data-width]').forEach(el => {
+      el.style.width = el.dataset.width + '%';
+    });
+    io.unobserve(e.target);
+  });
+}, { threshold: 0.12 });
+reveals.forEach(el => io.observe(el));
+
+// Also observe standalone counters not inside reveal
+document.querySelectorAll('.counter[data-target]').forEach(el => {
+  const cio = new IntersectionObserver(entries => {
+    if (entries[0].isIntersecting) {
+      animateCounter(el, +el.dataset.target, el.dataset.suffix || '');
+      cio.unobserve(el);
+    }
+  }, { threshold: 0.5 });
+  cio.observe(el);
+});
+
+function animateCounter(el, target, suffix) {
+  const start = performance.now();
+  const duration = 1800;
+  (function update(now) {
+    const p = Math.min((now - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - p, 3);
+    el.textContent = Math.round(eased * target) + suffix;
+    if (p < 1) requestAnimationFrame(update);
+  })(start);
+}
+
+// ── Contact form ──
+const form = document.getElementById('contact-form');
+const submitBtn = document.getElementById('submit-btn');
+const btnText = document.getElementById('btn-text');
+const spinner = document.getElementById('btn-spinner');
+const successMsg = document.getElementById('form-success');
+const errorMsg = document.getElementById('form-error');
+form.addEventListener('submit', async e => {
+  e.preventDefault();
+  errorMsg.classList.add('hidden');
+  successMsg.classList.add('hidden');
+  if (!form.name.value.trim() || !form.business.value.trim() || !form.email.value.trim()) {
+    errorMsg.classList.remove('hidden'); return;
+  }
+  btnText.textContent = 'Sending…';
+  spinner.classList.remove('hidden');
+  submitBtn.disabled = true;
+  await new Promise(r => setTimeout(r, 1000));
+  btnText.textContent = 'Book My Free Demo';
+  spinner.classList.add('hidden');
+  submitBtn.disabled = false;
+  successMsg.classList.remove('hidden');
+  const sub = encodeURIComponent(`Demo Request — ${form.business.value.trim()}`);
+  const bod = encodeURIComponent(`Name: ${form.name.value.trim()}\nBusiness: ${form.business.value.trim()}\nEmail: ${form.email.value.trim()}`);
+  window.location.href = `mailto:ceo@nothingbutvalue.com?subject=${sub}&body=${bod}`;
+  form.reset();
+});
+</script>
+</body>
+</html>
