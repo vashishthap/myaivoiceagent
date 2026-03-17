@@ -25,7 +25,7 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         // Use onboarding@resend.dev for testing until myaivoiceagent.co domain is verified in Resend.
         // Once domain is verified, change to: 'Demo Form <noreply@myaivoiceagent.co>'
-        from: 'Demo Form <onboarding@resend.dev>',
+        from: 'Demo Form <noreply@myaivoiceagent.co>',
         to: ['ceo@nothingbutvalue.com'],
         reply_to: email,
         subject: `Demo Request — ${business}`,
