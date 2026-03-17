@@ -1282,31 +1282,56 @@ function animateCounter(el, target, suffix) {
 }
 
 // ── Contact form ──
+// REPLACE everything from "// ── Contact form ──" down to and including "form.reset();" with this block.
+ 
 const form = document.getElementById('contact-form');
 const submitBtn = document.getElementById('submit-btn');
 const btnText = document.getElementById('btn-text');
 const spinner = document.getElementById('btn-spinner');
 const successMsg = document.getElementById('form-success');
 const errorMsg = document.getElementById('form-error');
+ 
 form.addEventListener('submit', async e => {
   e.preventDefault();
   errorMsg.classList.add('hidden');
   successMsg.classList.add('hidden');
+ 
   if (!form.name.value.trim() || !form.business.value.trim() || !form.email.value.trim()) {
-    errorMsg.classList.remove('hidden'); return;
+    errorMsg.classList.remove('hidden');
+    return;
   }
+ 
   btnText.textContent = 'Sending…';
   spinner.classList.remove('hidden');
   submitBtn.disabled = true;
-  await new Promise(r => setTimeout(r, 1000));
-  btnText.textContent = 'Book My Free Demo';
-  spinner.classList.add('hidden');
-  submitBtn.disabled = false;
-  successMsg.classList.remove('hidden');
-  const sub = encodeURIComponent(`Demo Request — ${form.business.value.trim()}`);
-  const bod = encodeURIComponent(`Name: ${form.name.value.trim()}\nBusiness: ${form.business.value.trim()}\nEmail: ${form.email.value.trim()}`);
-  window.location.href = `mailto:ceo@nothingbutvalue.com?subject=${sub}&body=${bod}`;
-  form.reset();
+ 
+  try {
+    const res = await fetch('/api/contact', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name:     form.name.value.trim(),
+        business: form.business.value.trim(),
+        email:    form.email.value.trim(),
+        phone:    form.phone.value.trim(),
+        industry: form.industry.value,
+        message:  form.message.value.trim(),
+      }),
+    });
+ 
+    if (!res.ok) throw new Error('Server error');
+ 
+    successMsg.classList.remove('hidden');
+    form.reset();
+ 
+  } catch {
+    errorMsg.textContent = 'Something went wrong — please try again or email us directly at ceo@nothingbutvalue.com';
+    errorMsg.classList.remove('hidden');
+  } finally {
+    btnText.textContent = 'Book My Free Demo';
+    spinner.classList.add('hidden');
+    submitBtn.disabled = false;
+  }
 });
 </script>
 </body>
