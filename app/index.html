@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SEO Monitoring · Internal · myaivoiceagent.co</title>
+  <!-- Internal tool — do NOT index. Belt + braces with robots.txt Disallow + meta. -->
+  <meta name="robots" content="noindex, nofollow, nosnippet, noarchive">
+  <meta name="googlebot" content="noindex, nofollow">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
+          colors: {
+            navy: { 950:'#060C1A', 900:'#0F172A', 800:'#1E293B', 700:'#334155', 600:'#475569', 500:'#64748B' },
+            sky:  { 700:'#0369A1', 600:'#0284C7', 500:'#0EA5E9', 400:'#38BDF8', 100:'#E0F2FE', 50:'#F0F9FF' }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { background: #F8FAFC; }
+    .gt { background: linear-gradient(135deg,#0369A1 0%,#38BDF8 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .tabular { font-variant-numeric: tabular-nums; }
+    .pill-error   { background:#FEE2E2; color:#991B1B; }
+    .pill-warning { background:#FEF3C7; color:#92400E; }
+    .pill-notice  { background:#DBEAFE; color:#1E40AF; }
+    .dot-todo  { background:#CBD5E1; box-shadow:0 0 0 4px rgba(203,213,225,.35); }
+    .dot-doing { background:#F59E0B; box-shadow:0 0 0 4px rgba(245,158,11,.20); }
+    .dot-done  { background:#10B981; box-shadow:0 0 0 4px rgba(16,185,129,.20); }
+  </style>
+</head>
+
+<body class="font-sans text-navy-900">
+
+<div class="max-w-7xl mx-auto px-6 py-10">
+
+  <!-- HEADER -->
+  <header class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+    <div>
+      <p class="text-xs font-semibold tracking-wide uppercase text-navy-500">SEO Monitoring · Internal</p>
+      <h1 class="mt-1 text-3xl font-extrabold">myaivoiceagent.<span class="gt">co</span></h1>
+      <p class="mt-1 text-sm text-navy-600">
+        Last snapshot <span id="snapshot-when">—</span>
+        · <span class="text-navy-500">Source: Ahrefs Site Audit (manual snapshot · 2 May 2026)</span>
+      </p>
+    </div>
+    <div class="flex gap-2">
+      <button id="reload-btn" class="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm hover:bg-slate-50">↻ Reload</button>
+      <a href="/" class="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm hover:bg-slate-50">View site →</a>
+      <a href="https://app.ahrefs.com/site-audit/9681380/overview" target="_blank" rel="noopener" class="rounded-md bg-navy-900 hover:bg-navy-800 px-3 py-2 text-sm font-medium text-white">Open Ahrefs ↗</a>
+    </div>
+  </header>
+
+  <!-- TOP ROW: HEALTH GAUGE + KPI GRID -->
+  <section class="mt-8 grid gap-6 lg:grid-cols-3">
+    <!-- HEALTH GAUGE -->
+    <div class="rounded-2xl border border-slate-200 bg-white p-6">
+      <div class="text-xs font-semibold tracking-wide uppercase text-navy-500">Health Score</div>
+      <div class="mt-2 flex items-center gap-6">
+        <svg width="200" height="200" viewBox="0 0 220 220" aria-hidden="true">
+          <circle cx="110" cy="110" r="90" stroke="#E2E8F0" stroke-width="14" fill="none"/>
+          <circle id="health-arc" cx="110" cy="110" r="90"
+                  stroke="#F59E0B" stroke-width="14" fill="none"
+                  stroke-linecap="round"
+                  stroke-dasharray="565.48" stroke-dashoffset="254.47"
+                  transform="rotate(-90 110 110)"/>
+          <text id="health-num" x="110" y="116" text-anchor="middle" font-size="44" font-weight="700" fill="#0F172A">55</text>
+          <text x="110" y="146" text-anchor="middle" font-size="14" fill="#64748B">/ 100</text>
+        </svg>
+        <div>
+          <div class="text-2xl font-bold capitalize">Fair</div>
+          <div class="mt-1 text-sm text-navy-600">Target 90+ in 14 days</div>
+          <div class="mt-3 h-2 w-40 rounded-full bg-slate-100">
+            <div class="h-2 rounded-full bg-green-500" style="width: 61%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- KPIs -->
+    <div class="lg:col-span-2 grid gap-4 sm:grid-cols-2 lg:grid-cols-3" id="kpi-grid"></div>
+  </section>
+
+  <!-- ISSUES + KEYWORDS -->
+  <section class="mt-8 grid gap-6 lg:grid-cols-2">
+    <!-- TOP ISSUES -->
+    <div class="rounded-2xl border border-slate-200 bg-white p-6">
+      <div class="mb-4">
+        <h2 class="text-lg font-bold">Top issues</h2>
+        <p class="text-xs text-navy-500">6 errors · 15 warnings · 11 notices</p>
+      </div>
+      <table class="w-full text-sm">
+        <thead class="text-left text-xs uppercase tracking-wide text-navy-500">
+          <tr><th class="pb-2">Severity</th><th class="pb-2">Issue</th><th class="pb-2 text-right">Pages</th><th class="pb-2 text-right">Fix doc</th></tr>
+        </thead>
+        <tbody id="issues-body" class="divide-y divide-slate-100"></tbody>
+      </table>
+    </div>
+
+    <!-- TRACKED KEYWORDS -->
+    <div class="rounded-2xl border border-slate-200 bg-white p-6">
+      <div class="mb-4">
+        <h2 class="text-lg font-bold">Tracked keywords</h2>
+        <p class="text-xs text-navy-500">Country: United Kingdom · Source: Ahrefs Rank Tracker</p>
+      </div>
+      <div class="max-h-96 overflow-y-auto">
+        <table class="w-full text-sm">
+          <thead class="sticky top-0 bg-white text-left text-xs uppercase tracking-wide text-navy-500">
+            <tr><th class="pb-2">Keyword</th><th class="pb-2">Cluster</th><th class="pb-2 text-right">Rank</th></tr>
+          </thead>
+          <tbody id="keywords-body" class="divide-y divide-slate-100"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- TECH FIXES + PHASES -->
+  <section class="mt-8 grid gap-6 lg:grid-cols-2">
+    <div class="rounded-2xl border border-slate-200 bg-white p-6">
+      <div class="mb-4">
+        <h2 class="text-lg font-bold">Technical fix queue</h2>
+        <p class="text-xs text-navy-500">Tied to marketing/seo/05_TECHNICAL_FIXES.md</p>
+      </div>
+      <ul id="fixes-list" class="space-y-2"></ul>
+    </div>
+    <div class="rounded-2xl border border-slate-200 bg-white p-6">
+      <div class="mb-4">
+        <h2 class="text-lg font-bold">Phase progress</h2>
+        <p class="text-xs text-navy-500">Tied to marketing/seo/04_CONTENT_CALENDAR.md</p>
+      </div>
+      <ul id="phases-list" class="space-y-3"></ul>
+    </div>
+  </section>
+
+  <!-- CONTENT CALENDAR -->
+  <section class="mt-8">
+    <div class="rounded-2xl border border-slate-200 bg-white p-6">
+      <div class="mb-4">
+        <h2 class="text-lg font-bold">14-week content calendar</h2>
+        <p class="text-xs text-navy-500">Each week = 1 pillar/lander + 1 supporting blog</p>
+      </div>
+      <div id="calendar-grid" class="grid gap-2 sm:grid-cols-2 lg:grid-cols-7"></div>
+    </div>
+  </section>
+
+  <!-- ACTIVITY + WIRING -->
+  <section class="mt-8 grid gap-6 lg:grid-cols-2">
+    <div class="rounded-2xl border border-slate-200 bg-white p-6">
+      <div class="mb-4">
+        <h2 class="text-lg font-bold">Recent activity</h2>
+        <p class="text-xs text-navy-500">Manual log — wire to Git/PR feed when ready</p>
+      </div>
+      <ol id="activity-log" class="space-y-3"></ol>
+    </div>
+
+    <div class="rounded-2xl border border-slate-200 bg-white p-6">
+      <div class="mb-4">
+        <h2 class="text-lg font-bold">Wiring guide</h2>
+        <p class="text-xs text-navy-500">How to swap mock data for live APIs</p>
+      </div>
+      <table class="w-full text-sm">
+        <thead class="text-left text-xs uppercase tracking-wide text-navy-500">
+          <tr><th class="pb-2">Source</th><th class="pb-2">Metric</th><th class="pb-2">API</th></tr>
+        </thead>
+        <tbody id="wiring-body" class="divide-y divide-slate-100"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer class="mt-12 text-center text-xs text-navy-500">
+    myaivoiceagent.co · Internal SEO dashboard · Not indexed
+  </footer>
+</div>
+
+<script>
+  // ============================================================================
+  // Mock dashboard data — replace with live API fetches when ready.
+  // Values reflect the Ahrefs Site Audit screenshot taken 2 May 2026 +
+  // the roadmap state from marketing/seo/.
+  // ============================================================================
+  const DATA = {
+    asOf: '2026-05-03T11:30:00Z',
+    health: { score: 55, band: 'fair' },
+    kpis: [
+      { label: 'Indexed pages',       value: 5,  target: 40, suffix: '/40' },
+      { label: 'Domain Rating',       value: 1,  target: 10 },
+      { label: 'Top-10 rankings (UK)', value: 0, target: 5 },
+      { label: 'Tracked keywords',    value: 25, hint: 'Ahrefs Rank Tracker' },
+      { label: 'GMB calls (30d)',     value: 0,  target: 15 },
+      { label: 'Demos from organic (30d)', value: 0, target: 5 }
+    ],
+    topIssues: [
+      { title: 'Non-canonical page in sitemap',                  severity: 'error',   count: 4, ref: '05 § 1' },
+      { title: 'Canonical URL has no incoming internal links',   severity: 'error',   count: 1, ref: '05 § 2' },
+      { title: 'Page has no outgoing links',                     severity: 'error',   count: 1, ref: '05 § 3' },
+      { title: 'Orphan page (not indexable)',                    severity: 'notice',  count: 4, ref: '05 § 4' }
+    ],
+    keywords: [
+      { kw: 'myaivoiceagent', cluster: 'brand', rank: 87 },
+      { kw: 'ai voice agent uk', cluster: 'generic', rank: null },
+      { kw: 'ai voice agent for small business uk', cluster: 'generic', rank: null },
+      { kw: 'ai receptionist uk', cluster: 'receptionist', rank: null },
+      { kw: 'ai receptionist cost uk', cluster: 'pricing', rank: null },
+      { kw: 'ai voice agent pricing uk', cluster: 'pricing', rank: null },
+      { kw: 'ai receptionist for dentists', cluster: 'dental', rank: null },
+      { kw: 'ai receptionist for dental practice', cluster: 'dental', rank: null },
+      { kw: 'ai voice agent for dental practice', cluster: 'dental', rank: null },
+      { kw: 'dental ai receptionist', cluster: 'dental', rank: null },
+      { kw: 'ai receptionist for dentists uk', cluster: 'dental', rank: null },
+      { kw: 'ai receptionist for salons', cluster: 'salon', rank: null },
+      { kw: 'ai booking system for salons uk', cluster: 'salon', rank: null },
+      { kw: 'ai receptionist for beauty salon', cluster: 'salon', rank: null },
+      { kw: 'ai receptionist for restaurants', cluster: 'restaurant', rank: null },
+      { kw: 'ai receptionist for plumbers', cluster: 'trades', rank: null },
+      { kw: 'ai answering service for tradesmen', cluster: 'trades', rank: null },
+      { kw: 'ai answering service uk', cluster: 'receptionist', rank: null },
+      { kw: '24/7 ai receptionist uk', cluster: 'receptionist', rank: null },
+      { kw: 'ai receptionist vs moneypenny', cluster: 'compare', rank: null },
+      { kw: 'ai voice agent vs human receptionist', cluster: 'compare', rank: null },
+      { kw: 'how much does an ai receptionist cost', cluster: 'pricing', rank: null },
+      { kw: 'ai receptionist gdpr uk', cluster: 'compliance', rank: null },
+      { kw: 'best ai voice agent uk', cluster: 'generic', rank: null },
+      { kw: 'british ai voice receptionist', cluster: 'generic', rank: null }
+    ],
+    fixes: [
+      { id: 'sitemap-canonical',  title: 'Sitemap contains only canonical URLs',                 severity: 'error',   status: 'done',  ref: '05 § 1' },
+      { id: 'orphan-canonical',   title: 'Add ≥3 internal links to the link-less canonical',     severity: 'error',   status: 'doing', ref: '05 § 2' },
+      { id: 'leaf-outlinks',      title: 'Page with no outgoing links → add RelatedLinks block', severity: 'error',   status: 'doing', ref: '05 § 3' },
+      { id: 'orphan-pages',       title: 'Resolve 4 orphan pages (keep / redirect / delete)',    severity: 'notice',  status: 'todo',  ref: '05 § 4' },
+      { id: 'meta-descriptions',  title: 'Unique meta description on every indexable page',      severity: 'warning', status: 'doing', ref: '05 § 5.1' },
+      { id: 'h1-uniqueness',      title: 'One H1 per page, contains primary keyword',            severity: 'warning', status: 'doing', ref: '05 § 5.3' },
+      { id: 'image-alt',          title: 'Alt text on every non-decorative image',               severity: 'warning', status: 'todo',  ref: '05 § 5.5' },
+      { id: 'core-web-vitals',    title: 'CWV: LCP < 2.5s, INP < 200ms, CLS < 0.1',              severity: 'warning', status: 'todo',  ref: '05 § 5.6' },
+      { id: 'redirect-chains',    title: 'Single canonical host (apex → www, single hop)',       severity: 'warning', status: 'done',  ref: '05 § 5.7' },
+      { id: 'og-images',          title: 'Unique OG image per page (1200×630)',                  severity: 'warning', status: 'todo',  ref: '05 § 5.9' },
+      { id: 'robots-txt',         title: 'robots.txt allows AI bots and points to sitemap',      severity: 'notice',  status: 'done',  ref: '05 § 8' },
+      { id: 'lang-en-gb',         title: '<html lang="en-GB"> sitewide',                         severity: 'notice',  status: 'done',  ref: '05 § 6' }
+    ],
+    phases: [
+      { name: 'Phase 1 — Spine (homepage, pricing, verticals)', weeks: 'Wks 1–4',  pct: 50 },
+      { name: 'Phase 2 — Trust & comparisons',                  weeks: 'Wks 5–8',  pct: 0 },
+      { name: 'Phase 3 — Local matrix',                         weeks: 'Wks 9–12', pct: 0 },
+      { name: 'Phase 4 — Sustain',                              weeks: 'Month 4+', pct: 0 }
+    ],
+    weeks: [
+      { week: 1,  title: 'Homepage rewrite + Pricing page + cost-of-AI blog', status: 'shipped' },
+      { week: 2,  title: 'Dental vertical lander + dental group case study',  status: 'in_progress' },
+      { week: 3,  title: 'Salon vertical lander + out-of-hours blog',         status: 'planned' },
+      { week: 4,  title: 'Restaurant + trades verticals + missed-call calc',  status: 'planned' },
+      { week: 5,  title: 'vs Voqal AI comparison page',                       status: 'planned' },
+      { week: 6,  title: 'vs AVAI + missed-call cost article',                status: 'planned' },
+      { week: 7,  title: 'vs Linda AI + NHS dental glossary',                 status: 'planned' },
+      { week: 8,  title: 'vs Moneypenny + AI vs human cost breakdown',        status: 'planned' },
+      { week: 9,  title: 'Local matrix Phase A — first 3 cities',             status: 'planned' },
+      { week: 10, title: 'Local matrix Phase A continued',                    status: 'planned' },
+      { week: 11, title: 'Local matrix Phase B + GDPR article',               status: 'planned' },
+      { week: 12, title: 'Local matrix Phase C + no-show calculator',         status: 'planned' },
+      { week: 13, title: 'How-it-works pillar + IVR vs AI',                   status: 'planned' },
+      { week: 14, title: 'Best-of round-up + ROI calculator',                 status: 'planned' }
+    ],
+    activity: [
+      { ts: '2026-05-04', type: 'fix',     text: 'Sitemap rebuilt — only canonical URLs (Ahrefs error #1 cleared)' },
+      { ts: '2026-05-04', type: 'fix',     text: 'robots.txt updated — AI bots (GPTBot/ClaudeBot/Perplexity) allowlisted' },
+      { ts: '2026-05-04', type: 'content', text: '/pricing, /ai-receptionist-for-dentists, /book-demo, /app pages live' },
+      { ts: '2026-05-03', type: 'note',    text: 'SEO system v1 documents shipped to marketing/seo/' },
+      { ts: '2026-05-02', type: 'note',    text: 'Ahrefs Site Audit baseline captured: Health 55, 6 errors' }
+    ],
+    wiring: [
+      { source: 'Ahrefs Site Audit',     metric: 'Health, issues, indexed pages',           api: 'GET /v3/site-audit/projects + /issues' },
+      { source: 'Ahrefs Rank Tracker',   metric: 'Keyword positions',                       api: 'GET /v3/rank-tracker/overview' },
+      { source: 'Ahrefs Site Explorer',  metric: 'DR, backlinks, ref domains',              api: 'GET /v3/site-explorer/metrics' },
+      { source: 'Google Search Console', metric: 'Impressions, clicks, top queries',        api: 'searchanalytics.query' },
+      { source: 'Google Business Profile', metric: 'GMB calls, profile views (30d)',        api: 'businessprofileperformance' },
+      { source: 'Plausible / GA4',       metric: 'Demo-form submits attributed to organic', api: 'GET /api/v1/stats/aggregate' }
+    ]
+  };
+
+  // ============================================================================
+  // RENDER
+  // ============================================================================
+  function render() {
+    const when = new Date(DATA.asOf);
+    document.getElementById('snapshot-when').textContent =
+      when.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) +
+      ' ' + when.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+
+    // KPI grid
+    const kpiGrid = document.getElementById('kpi-grid');
+    kpiGrid.innerHTML = DATA.kpis.map(k => {
+      const pct = k.target ? Math.min(100, (k.value / k.target) * 100) : null;
+      return `
+        <div class="rounded-2xl border border-slate-200 bg-white p-5">
+          <div class="text-xs font-semibold uppercase tracking-wide text-navy-500">${k.label}</div>
+          <div class="mt-2 flex items-baseline gap-1">
+            <span class="text-3xl font-extrabold tabular">${k.value}</span>
+            ${k.suffix ? `<span class="text-sm text-navy-500">${k.suffix}</span>` : ''}
+          </div>
+          ${pct !== null ? `<div class="mt-3 h-1.5 rounded-full bg-slate-100"><div class="h-1.5 rounded-full bg-navy-900" style="width: ${pct}%"></div></div>` : ''}
+          <div class="mt-2 text-xs text-navy-500">${k.target !== undefined ? `Target ${k.target}` : (k.hint || '')}</div>
+        </div>`;
+    }).join('');
+
+    // Issues
+    document.getElementById('issues-body').innerHTML = DATA.topIssues.map(i => `
+      <tr>
+        <td class="py-2"><span class="inline-block rounded-full px-2 py-0.5 text-xs font-medium pill-${i.severity}">${i.severity}</span></td>
+        <td class="py-2">${i.title}</td>
+        <td class="py-2 text-right tabular">${i.count}</td>
+        <td class="py-2 text-right text-xs text-navy-500">${i.ref}</td>
+      </tr>`).join('');
+
+    // Keywords
+    document.getElementById('keywords-body').innerHTML = DATA.keywords.map(r => {
+      let cell;
+      if (r.rank === null) {
+        cell = '<span class="text-xs text-slate-400">—</span>';
+      } else {
+        const colour = r.rank <= 10 ? 'bg-green-500' : r.rank <= 30 ? 'bg-amber-500' : 'bg-slate-400';
+        const w = Math.max(2, 100 - r.rank);
+        cell = `<div class="inline-flex items-center justify-end gap-2"><div class="h-1.5 w-20 rounded-full bg-slate-100"><div class="h-1.5 rounded-full ${colour}" style="width:${w}%"></div></div><span class="tabular">${r.rank}</span></div>`;
+      }
+      return `<tr><td class="py-2">${r.kw}</td><td class="py-2 text-xs text-navy-500">${r.cluster}</td><td class="py-2 text-right">${cell}</td></tr>`;
+    }).join('');
+
+    // Fixes
+    document.getElementById('fixes-list').innerHTML = DATA.fixes.map(f => `
+      <li class="flex items-center justify-between rounded-lg border border-slate-200 px-3 py-2">
+        <div class="flex items-center gap-3">
+          <span class="inline-block h-3 w-3 rounded-full dot-${f.status}" aria-label="${f.status}"></span>
+          <div>
+            <div class="text-sm font-medium">${f.title}</div>
+            <div class="text-xs text-navy-500">${f.ref}</div>
+          </div>
+        </div>
+        <span class="inline-block rounded-full px-2 py-0.5 text-xs font-medium pill-${f.severity}">${f.severity}</span>
+      </li>`).join('');
+
+    // Phases
+    document.getElementById('phases-list').innerHTML = DATA.phases.map(p => `
+      <li>
+        <div class="flex items-center justify-between text-sm">
+          <span class="font-medium">${p.name}</span>
+          <span class="text-xs text-navy-500">${p.weeks} · ${p.pct}%</span>
+        </div>
+        <div class="mt-1 h-2 w-full rounded-full bg-slate-100"><div class="h-2 rounded-full bg-navy-900" style="width:${p.pct}%"></div></div>
+      </li>`).join('');
+
+    // Calendar
+    document.getElementById('calendar-grid').innerHTML = DATA.weeks.map(w => {
+      const tone = w.status === 'shipped' ? 'bg-green-50 border-green-200'
+        : w.status === 'in_progress' ? 'bg-amber-50 border-amber-200'
+        : 'bg-slate-50 border-slate-200';
+      return `<div class="rounded-lg border p-3 ${tone}" title="${w.title.replace(/"/g, '&quot;')}">
+        <div class="text-xs font-bold text-navy-700">Wk ${w.week}</div>
+        <div class="mt-1 text-xs text-navy-700 leading-snug" style="display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;">${w.title}</div>
+        <div class="mt-2 text-[10px] uppercase tracking-wide text-navy-500">${w.status.replace('_',' ')}</div>
+      </div>`;
+    }).join('');
+
+    // Activity
+    document.getElementById('activity-log').innerHTML = DATA.activity.map(a => `
+      <li class="flex items-start gap-3">
+        <span class="mt-0.5 inline-block rounded-full bg-slate-100 px-2 py-0.5 text-[10px] uppercase tracking-wide text-navy-600">${a.type}</span>
+        <div><div class="text-sm">${a.text}</div><div class="text-xs text-navy-500">${a.ts}</div></div>
+      </li>`).join('');
+
+    // Wiring
+    document.getElementById('wiring-body').innerHTML = DATA.wiring.map(r => `
+      <tr><td class="py-2 font-medium">${r.source}</td><td class="py-2 text-navy-600">${r.metric}</td><td class="py-2 text-xs text-navy-500"><code>${r.api}</code></td></tr>
+    `).join('');
+  }
+
+  document.getElementById('reload-btn').addEventListener('click', () => {
+    // Future: fetch /api/dashboard for live values. Today: just re-render.
+    render();
+    const el = document.getElementById('reload-btn');
+    el.textContent = '✓ Refreshed';
+    setTimeout(() => el.textContent = '↻ Reload', 1200);
+  });
+
+  render();
+</script>
+
+</body>
+</html>
