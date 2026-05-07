@@ -37,6 +37,13 @@
   </url>
 
   <url>
+    <loc>https://www.myaivoiceagent.co/blog</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
     <loc>https://www.myaivoiceagent.co/blog/ai-receptionist-cost-uk-2026</loc>
     <lastmod>2026-05-05</lastmod>
     <changefreq>monthly</changefreq>
@@ -55,6 +62,34 @@
     <lastmod>2026-05-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://www.myaivoiceagent.co/blog/salon-out-of-hours-bookings</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://www.myaivoiceagent.co/ai-receptionist-for-restaurants</loc>
+    <lastmod>2026-05-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://www.myaivoiceagent.co/ai-receptionist-for-trades</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://www.myaivoiceagent.co/tools/missed-call-calculator</loc>
+    <lastmod>2026-05-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
   </url>
 
 </urlset>

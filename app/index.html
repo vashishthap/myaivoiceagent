@@ -3,8 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SEO Monitoring · Internal · myaivoiceagent.co</title>
-  <!-- Internal tool — do NOT index. Belt + braces with robots.txt Disallow + meta. -->
+  <title>SEO Admin · myaivoiceagent.co</title>
   <meta name="robots" content="noindex, nofollow, nosnippet, noarchive">
   <meta name="googlebot" content="noindex, nofollow">
 
@@ -32,36 +31,59 @@
     .pill-error   { background:#FEE2E2; color:#991B1B; }
     .pill-warning { background:#FEF3C7; color:#92400E; }
     .pill-notice  { background:#DBEAFE; color:#1E40AF; }
+    .pill-planned    { background:#F1F5F9; color:#475569; }
+    .pill-drafting   { background:#FEF3C7; color:#92400E; }
+    .pill-drafted    { background:#E0F2FE; color:#075985; }
+    .pill-in_review  { background:#EDE9FE; color:#5B21B6; }
+    .pill-shipped    { background:#D1FAE5; color:#065F46; }
     .dot-todo  { background:#CBD5E1; box-shadow:0 0 0 4px rgba(203,213,225,.35); }
     .dot-doing { background:#F59E0B; box-shadow:0 0 0 4px rgba(245,158,11,.20); }
     .dot-done  { background:#10B981; box-shadow:0 0 0 4px rgba(16,185,129,.20); }
+    details summary { list-style: none; cursor: pointer; }
+    details summary::-webkit-details-marker { display: none; }
+    details[open] summary .chev { transform: rotate(180deg); }
+    .chev { transition: transform .2s ease; }
+    /* Auth gate */
+    .gate-loader { position:fixed; inset:0; background:#F8FAFC; display:flex; align-items:center; justify-content:center; z-index:50; }
+    .spinner { width: 28px; height: 28px; border: 3px solid #E2E8F0; border-top-color: #0F172A; border-radius: 50%; animation: spin 0.8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
   </style>
 </head>
 
 <body class="font-sans text-navy-900">
 
-<div class="max-w-7xl mx-auto px-6 py-10">
+<!-- Auth-loading gate (hides everything until auth confirmed) -->
+<div id="gate" class="gate-loader" aria-live="polite">
+  <div class="text-center">
+    <div class="spinner mx-auto"></div>
+    <p class="mt-4 text-sm text-navy-500">Checking sign-in…</p>
+  </div>
+</div>
+
+<!-- Main dashboard (hidden until auth'd) -->
+<div id="dashboard" class="max-w-7xl mx-auto px-6 py-10 hidden">
 
   <!-- HEADER -->
   <header class="flex flex-col md:flex-row md:items-end justify-between gap-4">
     <div>
-      <p class="text-xs font-semibold tracking-wide uppercase text-navy-500">SEO Monitoring · Internal</p>
+      <p class="text-xs font-semibold tracking-wide uppercase text-navy-500">SEO Admin</p>
       <h1 class="mt-1 text-3xl font-extrabold">myaivoiceagent.<span class="gt">co</span></h1>
       <p class="mt-1 text-sm text-navy-600">
         Last snapshot <span id="snapshot-when">—</span>
-        · <span class="text-navy-500">Source: Ahrefs Site Audit (manual snapshot · 2 May 2026)</span>
+        · Source: Ahrefs Site Audit (manual snapshot · 2 May 2026)
       </p>
     </div>
-    <div class="flex gap-2">
+    <div class="flex flex-wrap gap-2 items-center">
+      <span class="text-xs text-navy-500 mr-2">Signed in as <span id="user-email" class="font-medium text-navy-700">—</span></span>
       <button id="reload-btn" class="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm hover:bg-slate-50">↻ Reload</button>
       <a href="/" class="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm hover:bg-slate-50">View site →</a>
       <a href="https://app.ahrefs.com/site-audit/9681380/overview" target="_blank" rel="noopener" class="rounded-md bg-navy-900 hover:bg-navy-800 px-3 py-2 text-sm font-medium text-white">Open Ahrefs ↗</a>
+      <button id="logout-btn" class="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm hover:bg-slate-50">Sign out</button>
     </div>
   </header>
 
   <!-- TOP ROW: HEALTH GAUGE + KPI GRID -->
   <section class="mt-8 grid gap-6 lg:grid-cols-3">
-    <!-- HEALTH GAUGE -->
     <div class="rounded-2xl border border-slate-200 bg-white p-6">
       <div class="text-xs font-semibold tracking-wide uppercase text-navy-500">Health Score</div>
       <div class="mt-2 flex items-center gap-6">
@@ -84,14 +106,20 @@
         </div>
       </div>
     </div>
-
-    <!-- KPIs -->
     <div class="lg:col-span-2 grid gap-4 sm:grid-cols-2 lg:grid-cols-3" id="kpi-grid"></div>
+  </section>
+
+  <!-- QUICK ACTIONS -->
+  <section class="mt-8">
+    <div class="rounded-2xl border border-slate-200 bg-white p-6">
+      <h2 class="text-lg font-bold">Quick actions</h2>
+      <p class="text-xs text-navy-500">Daily / weekly admin tasks — opens in a new tab.</p>
+      <div id="quick-actions" class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4"></div>
+    </div>
   </section>
 
   <!-- ISSUES + KEYWORDS -->
   <section class="mt-8 grid gap-6 lg:grid-cols-2">
-    <!-- TOP ISSUES -->
     <div class="rounded-2xl border border-slate-200 bg-white p-6">
       <div class="mb-4">
         <h2 class="text-lg font-bold">Top issues</h2>
@@ -105,20 +133,55 @@
       </table>
     </div>
 
-    <!-- TRACKED KEYWORDS -->
     <div class="rounded-2xl border border-slate-200 bg-white p-6">
-      <div class="mb-4">
-        <h2 class="text-lg font-bold">Tracked keywords</h2>
-        <p class="text-xs text-navy-500">Country: United Kingdom · Source: Ahrefs Rank Tracker</p>
+      <div class="mb-4 flex items-start justify-between gap-3">
+        <div>
+          <h2 class="text-lg font-bold">Tracked keywords</h2>
+          <p class="text-xs text-navy-500">Country: United Kingdom · Source: Ahrefs Rank Tracker</p>
+        </div>
+        <select id="cluster-filter" class="text-xs rounded-md border border-slate-300 bg-white px-2 py-1.5">
+          <option value="">All clusters</option>
+        </select>
       </div>
       <div class="max-h-96 overflow-y-auto">
         <table class="w-full text-sm">
           <thead class="sticky top-0 bg-white text-left text-xs uppercase tracking-wide text-navy-500">
-            <tr><th class="pb-2">Keyword</th><th class="pb-2">Cluster</th><th class="pb-2 text-right">Rank</th></tr>
+            <tr>
+              <th class="pb-2">Keyword</th>
+              <th class="pb-2">Cluster</th>
+              <th class="pb-2 text-right">Vol</th>
+              <th class="pb-2 text-right">KD</th>
+              <th class="pb-2 text-right">Rank</th>
+            </tr>
           </thead>
           <tbody id="keywords-body" class="divide-y divide-slate-100"></tbody>
         </table>
       </div>
+    </div>
+  </section>
+
+  <!-- CONTENT PUBLISHING QUEUE -->
+  <section class="mt-8">
+    <div class="rounded-2xl border border-slate-200 bg-white p-6">
+      <div class="mb-4 flex items-start justify-between gap-3 flex-wrap">
+        <div>
+          <h2 class="text-lg font-bold">Content publishing queue</h2>
+          <p class="text-xs text-navy-500">14-week cadence · 1 pillar/lander + 1 supporting per week. Click any row to expand the brief.</p>
+        </div>
+        <div class="flex items-center gap-2 text-xs">
+          <span class="text-navy-500">Filter:</span>
+          <select id="content-status-filter" class="rounded-md border border-slate-300 bg-white px-2 py-1.5">
+            <option value="">All statuses</option>
+            <option value="planned">Planned</option>
+            <option value="drafting">Drafting</option>
+            <option value="drafted">Drafted</option>
+            <option value="in_review">In review</option>
+            <option value="shipped">Shipped</option>
+            <option value="not-shipped">Not shipped (anything but shipped)</option>
+          </select>
+        </div>
+      </div>
+      <div id="content-list" class="space-y-3"></div>
     </div>
   </section>
 
@@ -140,17 +203,6 @@
     </div>
   </section>
 
-  <!-- CONTENT CALENDAR -->
-  <section class="mt-8">
-    <div class="rounded-2xl border border-slate-200 bg-white p-6">
-      <div class="mb-4">
-        <h2 class="text-lg font-bold">14-week content calendar</h2>
-        <p class="text-xs text-navy-500">Each week = 1 pillar/lander + 1 supporting blog</p>
-      </div>
-      <div id="calendar-grid" class="grid gap-2 sm:grid-cols-2 lg:grid-cols-7"></div>
-    </div>
-  </section>
-
   <!-- ACTIVITY + WIRING -->
   <section class="mt-8 grid gap-6 lg:grid-cols-2">
     <div class="rounded-2xl border border-slate-200 bg-white p-6">
@@ -160,7 +212,6 @@
       </div>
       <ol id="activity-log" class="space-y-3"></ol>
     </div>
-
     <div class="rounded-2xl border border-slate-200 bg-white p-6">
       <div class="mb-4">
         <h2 class="text-lg font-bold">Wiring guide</h2>
@@ -176,217 +227,806 @@
   </section>
 
   <footer class="mt-12 text-center text-xs text-navy-500">
-    myaivoiceagent.co · Internal SEO dashboard · Not indexed
+    myaivoiceagent.co · Internal SEO admin · Not indexed
   </footer>
 </div>
 
 <script>
-  // ============================================================================
-  // Mock dashboard data — replace with live API fetches when ready.
-  // Values reflect the Ahrefs Site Audit screenshot taken 2 May 2026 +
-  // the roadmap state from marketing/seo/.
-  // ============================================================================
-  const DATA = {
-    asOf: '2026-05-03T11:30:00Z',
-    health: { score: 55, band: 'fair' },
-    kpis: [
-      { label: 'Indexed pages',       value: 5,  target: 40, suffix: '/40' },
-      { label: 'Domain Rating',       value: 1,  target: 10 },
-      { label: 'Top-10 rankings (UK)', value: 0, target: 5 },
-      { label: 'Tracked keywords',    value: 25, hint: 'Ahrefs Rank Tracker' },
-      { label: 'GMB calls (30d)',     value: 0,  target: 15 },
-      { label: 'Demos from organic (30d)', value: 0, target: 5 }
-    ],
-    topIssues: [
-      { title: 'Non-canonical page in sitemap',                  severity: 'error',   count: 4, ref: '05 § 1' },
-      { title: 'Canonical URL has no incoming internal links',   severity: 'error',   count: 1, ref: '05 § 2' },
-      { title: 'Page has no outgoing links',                     severity: 'error',   count: 1, ref: '05 § 3' },
-      { title: 'Orphan page (not indexable)',                    severity: 'notice',  count: 4, ref: '05 § 4' }
-    ],
-    keywords: [
-      { kw: 'myaivoiceagent', cluster: 'brand', rank: 87 },
-      { kw: 'ai voice agent uk', cluster: 'generic', rank: null },
-      { kw: 'ai voice agent for small business uk', cluster: 'generic', rank: null },
-      { kw: 'ai receptionist uk', cluster: 'receptionist', rank: null },
-      { kw: 'ai receptionist cost uk', cluster: 'pricing', rank: null },
-      { kw: 'ai voice agent pricing uk', cluster: 'pricing', rank: null },
-      { kw: 'ai receptionist for dentists', cluster: 'dental', rank: null },
-      { kw: 'ai receptionist for dental practice', cluster: 'dental', rank: null },
-      { kw: 'ai voice agent for dental practice', cluster: 'dental', rank: null },
-      { kw: 'dental ai receptionist', cluster: 'dental', rank: null },
-      { kw: 'ai receptionist for dentists uk', cluster: 'dental', rank: null },
-      { kw: 'ai receptionist for salons', cluster: 'salon', rank: null },
-      { kw: 'ai booking system for salons uk', cluster: 'salon', rank: null },
-      { kw: 'ai receptionist for beauty salon', cluster: 'salon', rank: null },
-      { kw: 'ai receptionist for restaurants', cluster: 'restaurant', rank: null },
-      { kw: 'ai receptionist for plumbers', cluster: 'trades', rank: null },
-      { kw: 'ai answering service for tradesmen', cluster: 'trades', rank: null },
-      { kw: 'ai answering service uk', cluster: 'receptionist', rank: null },
-      { kw: '24/7 ai receptionist uk', cluster: 'receptionist', rank: null },
-      { kw: 'ai receptionist vs moneypenny', cluster: 'compare', rank: null },
-      { kw: 'ai voice agent vs human receptionist', cluster: 'compare', rank: null },
-      { kw: 'how much does an ai receptionist cost', cluster: 'pricing', rank: null },
-      { kw: 'ai receptionist gdpr uk', cluster: 'compliance', rank: null },
-      { kw: 'best ai voice agent uk', cluster: 'generic', rank: null },
-      { kw: 'british ai voice receptionist', cluster: 'generic', rank: null }
-    ],
-    fixes: [
-      { id: 'sitemap-canonical',  title: 'Sitemap contains only canonical URLs',                 severity: 'error',   status: 'done',  ref: '05 § 1' },
-      { id: 'orphan-canonical',   title: 'Add ≥3 internal links to the link-less canonical',     severity: 'error',   status: 'doing', ref: '05 § 2' },
-      { id: 'leaf-outlinks',      title: 'Page with no outgoing links → add RelatedLinks block', severity: 'error',   status: 'doing', ref: '05 § 3' },
-      { id: 'orphan-pages',       title: 'Resolve 4 orphan pages (keep / redirect / delete)',    severity: 'notice',  status: 'todo',  ref: '05 § 4' },
-      { id: 'meta-descriptions',  title: 'Unique meta description on every indexable page',      severity: 'warning', status: 'doing', ref: '05 § 5.1' },
-      { id: 'h1-uniqueness',      title: 'One H1 per page, contains primary keyword',            severity: 'warning', status: 'doing', ref: '05 § 5.3' },
-      { id: 'image-alt',          title: 'Alt text on every non-decorative image',               severity: 'warning', status: 'todo',  ref: '05 § 5.5' },
-      { id: 'core-web-vitals',    title: 'CWV: LCP < 2.5s, INP < 200ms, CLS < 0.1',              severity: 'warning', status: 'todo',  ref: '05 § 5.6' },
-      { id: 'redirect-chains',    title: 'Single canonical host (apex → www, single hop)',       severity: 'warning', status: 'done',  ref: '05 § 5.7' },
-      { id: 'og-images',          title: 'Unique OG image per page (1200×630)',                  severity: 'warning', status: 'todo',  ref: '05 § 5.9' },
-      { id: 'robots-txt',         title: 'robots.txt allows AI bots and points to sitemap',      severity: 'notice',  status: 'done',  ref: '05 § 8' },
-      { id: 'lang-en-gb',         title: '<html lang="en-GB"> sitewide',                         severity: 'notice',  status: 'done',  ref: '05 § 6' }
-    ],
-    phases: [
-      { name: 'Phase 1 — Spine (homepage, pricing, verticals)', weeks: 'Wks 1–4',  pct: 50 },
-      { name: 'Phase 2 — Trust & comparisons',                  weeks: 'Wks 5–8',  pct: 0 },
-      { name: 'Phase 3 — Local matrix',                         weeks: 'Wks 9–12', pct: 0 },
-      { name: 'Phase 4 — Sustain',                              weeks: 'Month 4+', pct: 0 }
-    ],
-    weeks: [
-      { week: 1,  title: 'Homepage rewrite + Pricing page + cost-of-AI blog', status: 'shipped' },
-      { week: 2,  title: 'Dental vertical lander + dental group case study',  status: 'in_progress' },
-      { week: 3,  title: 'Salon vertical lander + out-of-hours blog',         status: 'planned' },
-      { week: 4,  title: 'Restaurant + trades verticals + missed-call calc',  status: 'planned' },
-      { week: 5,  title: 'vs Voqal AI comparison page',                       status: 'planned' },
-      { week: 6,  title: 'vs AVAI + missed-call cost article',                status: 'planned' },
-      { week: 7,  title: 'vs Linda AI + NHS dental glossary',                 status: 'planned' },
-      { week: 8,  title: 'vs Moneypenny + AI vs human cost breakdown',        status: 'planned' },
-      { week: 9,  title: 'Local matrix Phase A — first 3 cities',             status: 'planned' },
-      { week: 10, title: 'Local matrix Phase A continued',                    status: 'planned' },
-      { week: 11, title: 'Local matrix Phase B + GDPR article',               status: 'planned' },
-      { week: 12, title: 'Local matrix Phase C + no-show calculator',         status: 'planned' },
-      { week: 13, title: 'How-it-works pillar + IVR vs AI',                   status: 'planned' },
-      { week: 14, title: 'Best-of round-up + ROI calculator',                 status: 'planned' }
-    ],
-    activity: [
-      { ts: '2026-05-04', type: 'fix',     text: 'Sitemap rebuilt — only canonical URLs (Ahrefs error #1 cleared)' },
-      { ts: '2026-05-04', type: 'fix',     text: 'robots.txt updated — AI bots (GPTBot/ClaudeBot/Perplexity) allowlisted' },
-      { ts: '2026-05-04', type: 'content', text: '/pricing, /ai-receptionist-for-dentists, /book-demo, /app pages live' },
-      { ts: '2026-05-03', type: 'note',    text: 'SEO system v1 documents shipped to marketing/seo/' },
-      { ts: '2026-05-02', type: 'note',    text: 'Ahrefs Site Audit baseline captured: Health 55, 6 errors' }
-    ],
-    wiring: [
-      { source: 'Ahrefs Site Audit',     metric: 'Health, issues, indexed pages',           api: 'GET /v3/site-audit/projects + /issues' },
-      { source: 'Ahrefs Rank Tracker',   metric: 'Keyword positions',                       api: 'GET /v3/rank-tracker/overview' },
-      { source: 'Ahrefs Site Explorer',  metric: 'DR, backlinks, ref domains',              api: 'GET /v3/site-explorer/metrics' },
-      { source: 'Google Search Console', metric: 'Impressions, clicks, top queries',        api: 'searchanalytics.query' },
-      { source: 'Google Business Profile', metric: 'GMB calls, profile views (30d)',        api: 'businessprofileperformance' },
-      { source: 'Plausible / GA4',       metric: 'Demo-form submits attributed to organic', api: 'GET /api/v1/stats/aggregate' }
-    ]
-  };
+// ============================================================================
+// DATA — single source of truth. Update these blocks as work progresses.
+// Status of content briefs persists per-browser via localStorage (key: content-status-<id>).
+// ============================================================================
+const DATA = {
+  asOf: '2026-05-04T11:30:00Z',
 
-  // ============================================================================
-  // RENDER
-  // ============================================================================
-  function render() {
-    const when = new Date(DATA.asOf);
-    document.getElementById('snapshot-when').textContent =
-      when.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) +
-      ' ' + when.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+  kpis: [
+    { label: 'Indexed pages',            value: 5,  target: 40, suffix: '/40' },
+    { label: 'Domain Rating',            value: 1,  target: 10 },
+    { label: 'Top-10 rankings (UK)',     value: 0,  target: 5 },
+    { label: 'Tracked keywords',         value: 25, hint: 'Ahrefs Rank Tracker' },
+    { label: 'GMB calls (30d)',          value: 0,  target: 15 },
+    { label: 'Demos from organic (30d)', value: 0,  target: 5 }
+  ],
 
-    // KPI grid
-    const kpiGrid = document.getElementById('kpi-grid');
-    kpiGrid.innerHTML = DATA.kpis.map(k => {
-      const pct = k.target ? Math.min(100, (k.value / k.target) * 100) : null;
-      return `
-        <div class="rounded-2xl border border-slate-200 bg-white p-5">
-          <div class="text-xs font-semibold uppercase tracking-wide text-navy-500">${k.label}</div>
-          <div class="mt-2 flex items-baseline gap-1">
-            <span class="text-3xl font-extrabold tabular">${k.value}</span>
-            ${k.suffix ? `<span class="text-sm text-navy-500">${k.suffix}</span>` : ''}
-          </div>
-          ${pct !== null ? `<div class="mt-3 h-1.5 rounded-full bg-slate-100"><div class="h-1.5 rounded-full bg-navy-900" style="width: ${pct}%"></div></div>` : ''}
-          <div class="mt-2 text-xs text-navy-500">${k.target !== undefined ? `Target ${k.target}` : (k.hint || '')}</div>
-        </div>`;
-    }).join('');
+  topIssues: [
+    { title: 'Non-canonical page in sitemap',                severity: 'error',  count: 4, ref: '05 § 1' },
+    { title: 'Canonical URL has no incoming internal links', severity: 'error',  count: 1, ref: '05 § 2' },
+    { title: 'Page has no outgoing links',                   severity: 'error',  count: 1, ref: '05 § 3' },
+    { title: 'Orphan page (not indexable)',                  severity: 'notice', count: 4, ref: '05 § 4' }
+  ],
 
-    // Issues
-    document.getElementById('issues-body').innerHTML = DATA.topIssues.map(i => `
-      <tr>
-        <td class="py-2"><span class="inline-block rounded-full px-2 py-0.5 text-xs font-medium pill-${i.severity}">${i.severity}</span></td>
-        <td class="py-2">${i.title}</td>
-        <td class="py-2 text-right tabular">${i.count}</td>
-        <td class="py-2 text-right text-xs text-navy-500">${i.ref}</td>
-      </tr>`).join('');
+  // Enhanced keyword set: estimated UK volume (vol), Ahrefs KD (kd), target URL.
+  // Volumes are estimates until live API is wired (see Wiring guide).
+  keywords: [
+    { kw: 'myaivoiceagent',                        cluster: 'brand',        vol: 10,    kd: 0,  rank: 87, target: '/' },
+    { kw: 'ai voice agent uk',                     cluster: 'generic',      vol: 450,   kd: 30, rank: null, target: '/' },
+    { kw: 'ai voice agent for small business uk',  cluster: 'generic',      vol: 150,   kd: 25, rank: null, target: '/' },
+    { kw: 'ai receptionist uk',                    cluster: 'receptionist', vol: 650,   kd: 30, rank: null, target: '/' },
+    { kw: 'ai receptionist cost uk',               cluster: 'pricing',      vol: 150,   kd: 20, rank: null, target: '/pricing' },
+    { kw: 'ai voice agent pricing uk',             cluster: 'pricing',      vol: 100,   kd: 25, rank: null, target: '/pricing' },
+    { kw: 'ai receptionist for dentists',          cluster: 'dental',       vol: 400,   kd: 35, rank: null, target: '/ai-receptionist-for-dentists' },
+    { kw: 'ai receptionist for dental practice',   cluster: 'dental',       vol: 150,   kd: 25, rank: null, target: '/ai-receptionist-for-dentists' },
+    { kw: 'ai voice agent for dental practice',    cluster: 'dental',       vol: 150,   kd: 25, rank: null, target: '/ai-receptionist-for-dentists' },
+    { kw: 'dental ai receptionist',                cluster: 'dental',       vol: 150,   kd: 30, rank: null, target: '/ai-receptionist-for-dentists' },
+    { kw: 'ai receptionist for dentists uk',       cluster: 'dental',       vol: 100,   kd: 20, rank: null, target: '/ai-receptionist-for-dentists' },
+    { kw: 'ai receptionist for salons',            cluster: 'salon',        vol: 150,   kd: 25, rank: null, target: '/ai-receptionist-for-salons' },
+    { kw: 'ai booking system for salons uk',       cluster: 'salon',        vol: 150,   kd: 25, rank: null, target: '/ai-receptionist-for-salons' },
+    { kw: 'ai receptionist for beauty salon',      cluster: 'salon',        vol: 100,   kd: 20, rank: null, target: '/ai-receptionist-for-salons' },
+    { kw: 'ai receptionist for restaurants',       cluster: 'restaurant',   vol: 150,   kd: 25, rank: null, target: '/ai-receptionist-for-restaurants' },
+    { kw: 'ai receptionist for plumbers',          cluster: 'trades',       vol: 150,   kd: 20, rank: null, target: '/ai-receptionist-for-trades' },
+    { kw: 'ai answering service for tradesmen',    cluster: 'trades',       vol: 100,   kd: 20, rank: null, target: '/ai-receptionist-for-trades' },
+    { kw: 'ai answering service uk',               cluster: 'receptionist', vol: 300,   kd: 30, rank: null, target: '/' },
+    { kw: '24/7 ai receptionist uk',               cluster: 'receptionist', vol: 150,   kd: 20, rank: null, target: '/' },
+    { kw: 'ai receptionist vs moneypenny',         cluster: 'compare',      vol: 50,    kd: 15, rank: null, target: '/compare/ai-receptionist-vs-moneypenny' },
+    { kw: 'ai voice agent vs human receptionist',  cluster: 'compare',      vol: 80,    kd: 20, rank: null, target: '/blog/ai-vs-human-receptionist-uk' },
+    { kw: 'how much does an ai receptionist cost', cluster: 'pricing',      vol: 300,   kd: 35, rank: null, target: '/blog/ai-receptionist-cost-uk-2026' },
+    { kw: 'ai receptionist gdpr uk',               cluster: 'compliance',   vol: 60,    kd: 15, rank: null, target: '/blog/ai-receptionist-gdpr-uk' },
+    { kw: 'best ai voice agent uk',                cluster: 'generic',      vol: 200,   kd: 35, rank: null, target: '/blog/best-ai-voice-agents-uk-2026' },
+    { kw: 'british ai voice receptionist',         cluster: 'generic',      vol: 50,    kd: 15, rank: null, target: '/' }
+  ],
 
-    // Keywords
-    document.getElementById('keywords-body').innerHTML = DATA.keywords.map(r => {
-      let cell;
-      if (r.rank === null) {
-        cell = '<span class="text-xs text-slate-400">—</span>';
-      } else {
-        const colour = r.rank <= 10 ? 'bg-green-500' : r.rank <= 30 ? 'bg-amber-500' : 'bg-slate-400';
-        const w = Math.max(2, 100 - r.rank);
-        cell = `<div class="inline-flex items-center justify-end gap-2"><div class="h-1.5 w-20 rounded-full bg-slate-100"><div class="h-1.5 rounded-full ${colour}" style="width:${w}%"></div></div><span class="tabular">${r.rank}</span></div>`;
-      }
-      return `<tr><td class="py-2">${r.kw}</td><td class="py-2 text-xs text-navy-500">${r.cluster}</td><td class="py-2 text-right">${cell}</td></tr>`;
-    }).join('');
+  fixes: [
+    { id: 'sitemap-canonical', title: 'Sitemap contains only canonical URLs',                 severity: 'error',   status: 'done',  ref: '05 § 1' },
+    { id: 'orphan-canonical',  title: 'Add ≥3 internal links to the link-less canonical',     severity: 'error',   status: 'doing', ref: '05 § 2' },
+    { id: 'leaf-outlinks',     title: 'Page with no outgoing links → add RelatedLinks block', severity: 'error',   status: 'doing', ref: '05 § 3' },
+    { id: 'orphan-pages',      title: 'Resolve 4 orphan pages (keep / redirect / delete)',    severity: 'notice',  status: 'todo',  ref: '05 § 4' },
+    { id: 'meta-descriptions', title: 'Unique meta description on every indexable page',      severity: 'warning', status: 'doing', ref: '05 § 5.1' },
+    { id: 'h1-uniqueness',     title: 'One H1 per page, contains primary keyword',            severity: 'warning', status: 'doing', ref: '05 § 5.3' },
+    { id: 'image-alt',         title: 'Alt text on every non-decorative image',               severity: 'warning', status: 'todo',  ref: '05 § 5.5' },
+    { id: 'core-web-vitals',   title: 'CWV: LCP < 2.5s, INP < 200ms, CLS < 0.1',              severity: 'warning', status: 'todo',  ref: '05 § 5.6' },
+    { id: 'redirect-chains',   title: 'Single canonical host (apex → www, single hop)',      severity: 'warning', status: 'done',  ref: '05 § 5.7' },
+    { id: 'og-images',         title: 'Unique OG image per page (1200×630)',                  severity: 'warning', status: 'todo',  ref: '05 § 5.9' },
+    { id: 'robots-txt',        title: 'robots.txt allows AI bots and points to sitemap',      severity: 'notice',  status: 'done',  ref: '05 § 8' },
+    { id: 'lang-en-gb',        title: '<html lang="en-GB"> sitewide',                         severity: 'notice',  status: 'done',  ref: '05 § 6' }
+  ],
 
-    // Fixes
-    document.getElementById('fixes-list').innerHTML = DATA.fixes.map(f => `
-      <li class="flex items-center justify-between rounded-lg border border-slate-200 px-3 py-2">
-        <div class="flex items-center gap-3">
-          <span class="inline-block h-3 w-3 rounded-full dot-${f.status}" aria-label="${f.status}"></span>
-          <div>
-            <div class="text-sm font-medium">${f.title}</div>
-            <div class="text-xs text-navy-500">${f.ref}</div>
-          </div>
-        </div>
-        <span class="inline-block rounded-full px-2 py-0.5 text-xs font-medium pill-${f.severity}">${f.severity}</span>
-      </li>`).join('');
+  phases: [
+    { name: 'Phase 1 — Spine (homepage, pricing, verticals)', weeks: 'Wks 1–4',  pct: 50 },
+    { name: 'Phase 2 — Trust & comparisons',                   weeks: 'Wks 5–8',  pct: 0 },
+    { name: 'Phase 3 — Local matrix',                          weeks: 'Wks 9–12', pct: 0 },
+    { name: 'Phase 4 — Sustain',                               weeks: 'Month 4+', pct: 0 }
+  ],
 
-    // Phases
-    document.getElementById('phases-list').innerHTML = DATA.phases.map(p => `
-      <li>
-        <div class="flex items-center justify-between text-sm">
-          <span class="font-medium">${p.name}</span>
-          <span class="text-xs text-navy-500">${p.weeks} · ${p.pct}%</span>
-        </div>
-        <div class="mt-1 h-2 w-full rounded-full bg-slate-100"><div class="h-2 rounded-full bg-navy-900" style="width:${p.pct}%"></div></div>
-      </li>`).join('');
+  activity: [
+    { ts: '2026-05-04', type: 'fix',     text: 'Magic-link admin auth + content publishing queue shipped to /app' },
+    { ts: '2026-05-04', type: 'content', text: '/pricing, /ai-receptionist-for-dentists, /book-demo, /app pages live on production' },
+    { ts: '2026-05-04', type: 'fix',     text: 'Sitemap rebuilt — only canonical URLs (Ahrefs error #1 cleared)' },
+    { ts: '2026-05-04', type: 'fix',     text: 'robots.txt updated — AI bots (GPTBot/ClaudeBot/Perplexity) allowlisted' },
+    { ts: '2026-05-03', type: 'note',    text: 'SEO system v1 documents shipped to marketing/seo/' },
+    { ts: '2026-05-02', type: 'note',    text: 'Ahrefs Site Audit baseline captured: Health 55, 6 errors' }
+  ],
 
-    // Calendar
-    document.getElementById('calendar-grid').innerHTML = DATA.weeks.map(w => {
-      const tone = w.status === 'shipped' ? 'bg-green-50 border-green-200'
-        : w.status === 'in_progress' ? 'bg-amber-50 border-amber-200'
-        : 'bg-slate-50 border-slate-200';
-      return `<div class="rounded-lg border p-3 ${tone}" title="${w.title.replace(/"/g, '&quot;')}">
-        <div class="text-xs font-bold text-navy-700">Wk ${w.week}</div>
-        <div class="mt-1 text-xs text-navy-700 leading-snug" style="display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;">${w.title}</div>
-        <div class="mt-2 text-[10px] uppercase tracking-wide text-navy-500">${w.status.replace('_',' ')}</div>
-      </div>`;
-    }).join('');
+  wiring: [
+    { source: 'Ahrefs Site Audit',       metric: 'Health, issues, indexed pages',            api: 'GET /v3/site-audit/projects + /issues' },
+    { source: 'Ahrefs Rank Tracker',     metric: 'Keyword positions',                        api: 'GET /v3/rank-tracker/overview' },
+    { source: 'Ahrefs Site Explorer',    metric: 'DR, backlinks, ref domains',               api: 'GET /v3/site-explorer/metrics' },
+    { source: 'Google Search Console',   metric: 'Impressions, clicks, top queries',         api: 'searchanalytics.query' },
+    { source: 'Google Business Profile', metric: 'GMB calls, profile views (30d)',           api: 'businessprofileperformance' },
+    { source: 'Plausible / GA4',         metric: 'Demo-form submits attributed to organic',  api: 'GET /api/v1/stats/aggregate' }
+  ],
 
-    // Activity
-    document.getElementById('activity-log').innerHTML = DATA.activity.map(a => `
-      <li class="flex items-start gap-3">
-        <span class="mt-0.5 inline-block rounded-full bg-slate-100 px-2 py-0.5 text-[10px] uppercase tracking-wide text-navy-600">${a.type}</span>
-        <div><div class="text-sm">${a.text}</div><div class="text-xs text-navy-500">${a.ts}</div></div>
-      </li>`).join('');
+  quickActions: [
+    { label: 'Ahrefs Site Audit', sub: 'Re-crawl + view issues',  href: 'https://app.ahrefs.com/site-audit/9681380/overview' },
+    { label: 'Ahrefs Rank Tracker', sub: 'UK keyword positions', href: 'https://app.ahrefs.com/rank-tracker' },
+    { label: 'GSC: Sitemaps',        sub: 'Re-submit sitemap',     href: 'https://search.google.com/search-console/sitemaps?resource_id=sc-domain%3Amyaivoiceagent.co' },
+    { label: 'GSC: URL Inspection',  sub: 'Request indexing',      href: 'https://search.google.com/search-console/inspect?resource_id=sc-domain%3Amyaivoiceagent.co' },
+    { label: 'Schema validator',     sub: 'Validate structured data', href: 'https://validator.schema.org/' },
+    { label: 'Rich Results test',    sub: 'Google rich-result eligibility', href: 'https://search.google.com/test/rich-results' },
+    { label: 'Vercel deployments',   sub: 'Build status + rollback', href: 'https://vercel.com/prashant-vashishthas-projects/myaivoiceagent/deployments' },
+    { label: 'Resend dashboard',     sub: 'Email delivery logs',   href: 'https://resend.com/emails' }
+  ],
 
-    // Wiring
-    document.getElementById('wiring-body').innerHTML = DATA.wiring.map(r => `
-      <tr><td class="py-2 font-medium">${r.source}</td><td class="py-2 text-navy-600">${r.metric}</td><td class="py-2 text-xs text-navy-500"><code>${r.api}</code></td></tr>
-    `).join('');
+  // ==========================================================================
+  // CONTENT PUBLISHING QUEUE — full briefs per week.
+  // Each item is a single deliverable. Status is overridden by localStorage.
+  // ==========================================================================
+  content: [
+    {
+      id: 'wk1-pricing',
+      week: 1, type: 'pillar', initialStatus: 'shipped',
+      title: 'Pricing page', target: '/pricing',
+      cluster: 'pricing', primaryKw: 'ai receptionist cost uk', vol: 150, kd: 20, words: 1200,
+      titleTag: 'AI Receptionist Pricing UK | Plans from £200/month | myaivoiceagent.co',
+      meta: 'Transparent UK pricing for AI receptionist plans. Three flat tiers from £200/month plus a one-time setup. No per-minute surprises, no contracts.',
+      h1: 'Pricing that fits a small business.',
+      h2: ['Three plans, no per-minute surprises', "What's included on every plan", 'One-time setup, then a flat monthly fee', 'Frequently asked questions'],
+      schema: ['Service', 'Offer', 'FAQPage', 'BreadcrumbList'],
+      internalLinks: ['/', '/ai-receptionist-for-dentists', '/book-demo'],
+      inspiration: ['https://voqalai.com/pricing', 'https://www.meetlinda.ai/'],
+      notes: 'Live. Three flat tiers (£200/£350/£500). Pro highlighted as Most Popular. Refresh quarterly.'
+    },
+    {
+      id: 'wk1-blog-cost',
+      week: 1, type: 'supporting', initialStatus: 'planned',
+      title: 'Blog: How much does an AI receptionist cost in the UK in 2026?', target: '/blog/ai-receptionist-cost-uk-2026',
+      cluster: 'pricing', primaryKw: 'how much does an ai receptionist cost', vol: 300, kd: 35, words: 1500,
+      titleTag: 'How Much Does an AI Receptionist Cost in the UK (2026)?',
+      meta: 'A clear UK pricing breakdown for AI receptionists in 2026. Includes a side-by-side comparison vs Voqal, AVAI, Linda, and a traditional answering service.',
+      h1: 'How much does an AI receptionist cost in the UK in 2026?',
+      h2: ['The headline answer (in one number)', 'How AI receptionist pricing typically works', 'Side-by-side: us vs Voqal vs AVAI vs Linda vs human', 'What the setup fee actually pays for', 'Hidden costs to ask about', 'When AI is and isn\'t cheaper than a human'],
+      schema: ['Article', 'BreadcrumbList'],
+      internalLinks: ['/pricing', '/ai-receptionist-for-dentists', '/book-demo'],
+      inspiration: ['https://ai-receptionist.com/blog/ai-receptionist-cost-and-pricing-guide/', 'https://www.getnextphone.com/blog/ai-receptionist-cost'],
+      notes: 'Cite real prices with dates. This page is a citation magnet for AI search engines (GEO/AEO).'
+    },
+    {
+      id: 'wk2-dental-lander',
+      week: 2, type: 'pillar', initialStatus: 'shipped',
+      title: 'Dental vertical lander', target: '/ai-receptionist-for-dentists',
+      cluster: 'dental', primaryKw: 'ai receptionist for dentists', vol: 400, kd: 35, words: 1200,
+      titleTag: 'AI Receptionist for UK Dentists | NHS & Private Bookings 24/7',
+      meta: 'A 24/7 British-voiced AI receptionist for UK dental practices. Books NHS and private appointments, triages emergencies, quotes implants, and chases Google reviews.',
+      h1: 'An AI receptionist built for UK dental practices.',
+      h2: ['What Sofia handles for a UK dental practice', 'Built for UK dental groups', 'Why UK dental practices switch', 'Frequently asked questions'],
+      schema: ['Service', 'FAQPage', 'BreadcrumbList'],
+      internalLinks: ['/pricing', '/book-demo'],
+      inspiration: ['https://www.arini.ai/', 'https://www.meetlinda.ai/', 'https://heygent.ai/'],
+      notes: 'Live. NHS triage angle is the main differentiator vs US dental-AI competitors.'
+    },
+    {
+      id: 'wk2-case-study',
+      week: 2, type: 'supporting', initialStatus: 'planned',
+      title: 'Case study: Multi-practice dental group, West England', target: '/case-studies/dental-group-west-england',
+      cluster: 'dental', primaryKw: 'ai dental receptionist case study', vol: 30, kd: 10, words: 1200,
+      titleTag: 'Case Study: How a 3-Practice Dental Group Handles Every Call',
+      meta: 'How a multi-practice UK dental group answers every NHS, private, and out-of-hours call across three sites with one AI receptionist. Anonymised case study.',
+      h1: 'How a multi-practice dental group answers every patient call with one AI agent',
+      h2: ['The brief: three practices, three reception desks, missed calls', 'What Sofia handles each day', 'Results in the first three months', 'What we learned (and what we\'d change)', 'Want to see this in action?'],
+      schema: ['Article', 'BreadcrumbList', 'Organization (mentions)'],
+      internalLinks: ['/ai-receptionist-for-dentists', '/pricing', '/book-demo'],
+      inspiration: ['https://www.arini.ai/customers'],
+      notes: 'ANONYMISED — no client names, no city names, no practice addresses. Use "a multi-practice dental group in West England". Results: aim for "X% reduction in missed calls", "Y new bookings/month", "Z reviews/month" — get permission for any specific numbers.'
+    },
+    {
+      id: 'wk3-salon-lander',
+      week: 3, type: 'pillar', initialStatus: 'planned',
+      title: 'Salon vertical lander', target: '/ai-receptionist-for-salons',
+      cluster: 'salon', primaryKw: 'ai receptionist for salons', vol: 150, kd: 25, words: 1200,
+      titleTag: 'AI Receptionist for UK Salons | Books 24/7, WhatsApp Confirmations',
+      meta: 'An AI receptionist that books salon appointments out of hours, sends WhatsApp confirmations, and rebooks last-minute cancellations — flat monthly fee.',
+      h1: 'An AI receptionist for UK salons and beauty clinics.',
+      h2: ['Capture bookings while your stylists are with clients', 'Same-day rebooking when a client cancels', 'WhatsApp confirmations and reminders', 'Built for UK independents and chains', 'Pricing', 'FAQ'],
+      schema: ['Service', 'FAQPage', 'BreadcrumbList'],
+      internalLinks: ['/pricing', '/book-demo', '/ai-receptionist-for-dentists'],
+      inspiration: ['https://voqalai.com/', 'https://www.thevoipshop.co.uk/ai-receptionist'],
+      notes: 'Same template as dental lander. WhatsApp + same-day rebooking are the salon-specific differentiators. Mention independent vs chain explicitly.'
+    },
+    {
+      id: 'wk3-blog-salon-ooh',
+      week: 3, type: 'supporting', initialStatus: 'planned',
+      title: 'Blog: 5 reasons UK salons lose bookings outside opening hours', target: '/blog/salon-out-of-hours-bookings',
+      cluster: 'salon', primaryKw: 'salon out of hours missed bookings', vol: 80, kd: 15, words: 1000,
+      titleTag: '5 Reasons UK Salons Lose Bookings Outside Hours',
+      meta: 'UK salons lose ~30% of bookings to missed out-of-hours calls. Five fixable reasons — and what to do about each.',
+      h1: '5 reasons UK salons lose bookings outside opening hours (and what to do)',
+      h2: ['Reason 1: Most clients book in the evening', 'Reason 2: Cancellations spike outside hours, rebookings don\'t', 'Reason 3: WhatsApp messages pile up overnight', 'Reason 4: Last-minute slots stay empty', 'Reason 5: Reviews drop because nobody asks', 'Fixing all five with one AI receptionist'],
+      schema: ['Article', 'BreadcrumbList'],
+      internalLinks: ['/ai-receptionist-for-salons', '/pricing'],
+      inspiration: [],
+      notes: 'Stats from Beauty Industry Group / CSO. Cite sources. End-of-post CTA: salon lander.'
+    },
+    {
+      id: 'wk4-restaurant-lander',
+      week: 4, type: 'pillar', initialStatus: 'planned',
+      title: 'Restaurant vertical lander', target: '/ai-receptionist-for-restaurants',
+      cluster: 'restaurant', primaryKw: 'ai receptionist for restaurants', vol: 150, kd: 25, words: 1200,
+      titleTag: 'AI Receptionist for UK Restaurants | Bookings 24/7',
+      meta: 'An AI receptionist that takes restaurant bookings, handles takeaway orders, and answers FAQs in a natural British voice — 24/7, flat monthly fee.',
+      h1: 'An AI receptionist for UK restaurants.',
+      h2: ['Captures bookings during service when staff are slammed', 'Multi-language order intake (Indian, Italian, Thai cuisine)', 'Integrates with OpenTable, ResDiary, SevenRooms', 'Pricing', 'FAQ'],
+      schema: ['Service', 'FAQPage', 'BreadcrumbList'],
+      internalLinks: ['/pricing', '/book-demo'],
+      inspiration: [],
+      notes: 'Multi-language angle is the differentiator (e.g. complex Indian menu items pronounced correctly). Test with a real curry-house menu.'
+    },
+    {
+      id: 'wk4-trades-lander',
+      week: 4, type: 'pillar', initialStatus: 'planned',
+      title: 'Trades vertical lander', target: '/ai-receptionist-for-trades',
+      cluster: 'trades', primaryKw: 'ai receptionist for plumbers', vol: 150, kd: 20, words: 1200,
+      titleTag: 'AI Receptionist for UK Tradesmen | 24/7 Emergency Routing',
+      meta: 'Plumbers, electricians, gas engineers: never miss a job. Our AI receptionist triages emergency calls, qualifies leads, and books site visits 24/7.',
+      h1: 'An AI receptionist for UK tradesmen.',
+      h2: ['Never miss an emergency callout', 'Qualifies leads while you\'re on the tools', 'Books site visits straight into your calendar', 'Pricing', 'FAQ'],
+      schema: ['Service', 'FAQPage', 'BreadcrumbList'],
+      internalLinks: ['/pricing', '/book-demo'],
+      inspiration: [],
+      notes: 'Emergency-routing flow ports directly from dental emergency triage. Keywords vary across plumber/electrician/gas.'
+    },
+    {
+      id: 'wk4-calculator',
+      week: 4, type: 'tool', initialStatus: 'planned',
+      title: 'Tool: Missed-call cost calculator', target: '/tools/missed-call-calculator',
+      cluster: 'tools', primaryKw: 'missed call cost calculator', vol: 60, kd: 15, words: 600,
+      titleTag: 'How Much Are Missed Calls Costing Your Business? Free Calculator',
+      meta: 'Sliders for calls/day, answer rate, conversion, and average order value. Get a £/year lost-revenue figure in 30 seconds.',
+      h1: 'How much are missed calls costing your business?',
+      h2: ['Your inputs', 'Your missed-call cost', 'How to fix it', 'See your industry'],
+      schema: ['SoftwareApplication', 'BreadcrumbList'],
+      internalLinks: ['/pricing', '/ai-receptionist-for-dentists', '/ai-receptionist-for-salons'],
+      inspiration: [],
+      notes: 'Single-page interactive. NO email gate (don\'t kill backlinks). Embed share-buttons + "Calculate yours →" widget snippet for guest posts.'
+    },
+    {
+      id: 'wk5-vs-voqal',
+      week: 5, type: 'compare', initialStatus: 'planned',
+      title: 'Comparison: vs Voqal AI', target: '/compare/myaivoiceagent-vs-voqal',
+      cluster: 'compare', primaryKw: 'myaivoiceagent vs voqal', vol: 30, kd: 10, words: 1200,
+      titleTag: 'MyAIVoiceAgent vs Voqal AI | Honest UK Comparison 2026',
+      meta: 'An honest side-by-side of MyAIVoiceAgent and Voqal AI for UK SMB use cases. Pricing, features, and where each one wins.',
+      h1: 'MyAIVoiceAgent vs Voqal AI: which UK AI receptionist is right for you?',
+      h2: ['Quick verdict', 'Side-by-side feature matrix', 'Where Voqal is better', 'Where we\'re better', 'Which one should you choose?'],
+      schema: ['Article', 'BreadcrumbList', 'FAQPage'],
+      internalLinks: ['/pricing', '/ai-receptionist-for-dentists', '/book-demo'],
+      inspiration: ['https://voqalai.com/'],
+      notes: 'Be honest — list where Voqal beats us (lower entry price, no setup fee). Honesty outranks fluff. Update quarterly.'
+    },
+    {
+      id: 'wk6-vs-avai',
+      week: 6, type: 'compare', initialStatus: 'planned',
+      title: 'Comparison: vs AVAI', target: '/compare/myaivoiceagent-vs-avai',
+      cluster: 'compare', primaryKw: 'myaivoiceagent vs avai', vol: 20, kd: 10, words: 1200,
+      titleTag: 'MyAIVoiceAgent vs AVAI | Honest UK Comparison 2026',
+      meta: 'AVAI vs MyAIVoiceAgent — pricing transparency, vertical depth, and where each wins for UK SMBs.',
+      h1: 'MyAIVoiceAgent vs AVAI: which UK AI receptionist is right for you?',
+      h2: ['Quick verdict', 'Side-by-side feature matrix', 'Where AVAI is better', 'Where we\'re better', 'Which one should you choose?'],
+      schema: ['Article', 'BreadcrumbList', 'FAQPage'],
+      internalLinks: ['/pricing', '/book-demo'],
+      inspiration: ['https://aivoiceautomation.co.uk/'],
+      notes: 'AVAI hides pricing. Our transparent tiers are the differentiator. AVAI has outbound — note where they\'re better.'
+    },
+    {
+      id: 'wk6-blog-missed-calls',
+      week: 6, type: 'supporting', initialStatus: 'planned',
+      title: 'Blog: The true cost of missed calls for UK SMBs', target: '/blog/cost-of-missed-calls-uk-smb',
+      cluster: 'awareness', primaryKw: 'cost of missed calls small business uk', vol: 200, kd: 25, words: 1800,
+      titleTag: 'The True Cost of Missed Calls for UK Small Businesses (2026)',
+      meta: 'New analysis of how many calls UK SMBs miss, what each costs, and which industries lose the most. Citation-ready stats for 2026.',
+      h1: 'The true cost of missed calls for UK small businesses',
+      h2: ['How many calls UK SMBs actually miss (the headline stat)', 'What one missed call costs by industry', 'Where the cost shows up: bookings, reviews, repeat business', 'What 24/7 answering changes — with real numbers', 'Methodology'],
+      schema: ['Article', 'BreadcrumbList'],
+      internalLinks: ['/tools/missed-call-calculator', '/ai-receptionist-for-dentists', '/ai-receptionist-for-salons', '/pricing'],
+      inspiration: [],
+      notes: 'CITATION-BAIT. Run a small SurveyMonkey or pull from ONS / BSI. Headline stat (e.g. "UK SMBs miss 38% of calls outside hours") is the most-quoted number. Include methodology so AI engines trust it.'
+    },
+    {
+      id: 'wk7-vs-linda',
+      week: 7, type: 'compare', initialStatus: 'planned',
+      title: 'Comparison: vs Linda AI', target: '/compare/myaivoiceagent-vs-linda-ai',
+      cluster: 'compare', primaryKw: 'myaivoiceagent vs linda ai', vol: 20, kd: 10, words: 1200,
+      titleTag: 'MyAIVoiceAgent vs Linda AI | Honest UK Comparison 2026',
+      meta: 'Linda AI vs MyAIVoiceAgent — multi-vertical breadth vs dental specialism, transparent pricing, and where each wins.',
+      h1: 'MyAIVoiceAgent vs Linda AI: which UK AI receptionist is right for you?',
+      h2: ['Quick verdict', 'Side-by-side', 'Where Linda is better (dental-only depth)', 'Where we\'re better', 'Which one should you choose?'],
+      schema: ['Article', 'BreadcrumbList', 'FAQPage'],
+      internalLinks: ['/ai-receptionist-for-dentists', '/pricing'],
+      inspiration: ['https://www.meetlinda.ai/'],
+      notes: 'Linda is dental-specialist with deposit-taking. Our breadth (multi-vertical) is the differentiator.'
+    },
+    {
+      id: 'wk7-glossary',
+      week: 7, type: 'glossary', initialStatus: 'planned',
+      title: 'NHS dental glossary (7 entries)', target: '/glossary/nhs-dental-uda',
+      cluster: 'dental', primaryKw: 'nhs uda', vol: 150, kd: 15, words: 1800,
+      titleTag: 'NHS Dental Terms Glossary | UDA, Bands, Recall, 111',
+      meta: 'A plain-English glossary of NHS dental terms — UDA, NHS bands 1/2/3, recall, urgent dental care, sedation, referral. For UK practice managers.',
+      h1: 'NHS dental terms — a plain-English glossary',
+      h2: ['UDA (Units of Dental Activity)', 'NHS bands 1, 2, and 3', 'Recall', 'Urgent dental care (UDC)', 'Referral', 'Sedation', 'Private treatment'],
+      schema: ['DefinedTermSet', 'BreadcrumbList', 'FAQPage'],
+      internalLinks: ['/ai-receptionist-for-dentists', '/blog/ai-receptionist-nhs-dental-triage'],
+      inspiration: [],
+      notes: '7 short entries (200-300 words each). Each entry: definition + how AI handles it. Perfect AI-citation bait — UK NHS specificity that global competitors can\'t match.'
+    },
+    {
+      id: 'wk8-vs-moneypenny',
+      week: 8, type: 'compare', initialStatus: 'planned',
+      title: 'Comparison: AI receptionist vs Moneypenny', target: '/compare/ai-receptionist-vs-moneypenny',
+      cluster: 'compare', primaryKw: 'ai receptionist vs moneypenny', vol: 50, kd: 15, words: 1500,
+      titleTag: 'AI Receptionist vs Moneypenny | UK Comparison 2026',
+      meta: 'Moneypenny is the UK answering-service incumbent. Honest comparison of AI receptionists vs Moneypenny — cost, quality, scaling.',
+      h1: 'AI receptionist vs Moneypenny: which is right for your UK business?',
+      h2: ['Quick verdict', 'Cost comparison (per call, per month)', 'Where Moneypenny still wins', 'Where AI wins', 'Hybrid: when to use both', 'Which one should you choose?'],
+      schema: ['Article', 'BreadcrumbList', 'FAQPage'],
+      internalLinks: ['/pricing', '/ai-receptionist-for-dentists'],
+      inspiration: ['https://www.moneypenny.com/uk/'],
+      notes: 'Moneypenny is the BIG UK incumbent — high-intent buyers Google this. Our angle: 24/7 always-on at flat fee vs per-minute.'
+    },
+    {
+      id: 'wk8-blog-vs-human',
+      week: 8, type: 'supporting', initialStatus: 'planned',
+      title: 'Blog: AI vs human receptionist — UK SMB cost breakdown', target: '/blog/ai-vs-human-receptionist-uk',
+      cluster: 'awareness', primaryKw: 'ai vs human receptionist cost uk', vol: 80, kd: 20, words: 1500,
+      titleTag: 'AI vs Human Receptionist: UK SMB Cost Breakdown (2026)',
+      meta: 'Side-by-side cost: £200/mo AI vs £25k/year human + on-costs. Where humans still win, and when to pick which.',
+      h1: 'AI vs human receptionist: a UK SMB cost breakdown',
+      h2: ['The headline numbers', '£200/mo vs £25k/year + on-costs', 'Where humans still win (judgement, complaints, hand-off)', 'Hybrid: AI front door + human escalation', 'Decision framework: 3 questions'],
+      schema: ['Article', 'BreadcrumbList'],
+      internalLinks: ['/pricing', '/tools/missed-call-calculator'],
+      inspiration: [],
+      notes: 'Honest framing — humans win on edge cases. Don\'t overclaim. Decision framework should help small biz owners choose.'
+    },
+    {
+      id: 'wks9-12-local',
+      week: 9, type: 'matrix', initialStatus: 'planned',
+      title: 'Local matrix: 10 cities × 4 verticals (40 pages programmatic)', target: '/[city]/ai-receptionist-for-[vertical]',
+      cluster: 'local', primaryKw: 'ai receptionist [city]', vol: 30, kd: 10, words: 600,
+      titleTag: 'AI Receptionist for [Vertical] in [City] | myaivoiceagent.co',
+      meta: 'A British-voiced AI receptionist for [vertical-singular]s in [City]. 24/7 call answering, appointment booking, review follow-up — flat monthly pricing.',
+      h1: 'AI receptionist for [vertical] in [City]',
+      h2: ['How [Vertical] in [City] handle calls today', 'What changes with an AI receptionist', 'Pricing for [City] businesses', 'Talk to a [City]-based [vertical-singular] using us'],
+      schema: ['LocalBusiness', 'Service', 'BreadcrumbList'],
+      internalLinks: ['/ai-receptionist-for-[vertical]', '/pricing', '/book-demo'],
+      inspiration: [],
+      notes: 'PROGRAMMATIC. 10 cities (London, Manchester, Birmingham, Bristol, Leeds, Glasgow, Edinburgh, Liverpool, Cambridge, Sheffield) × 4 verticals = 40 pages. Each MUST have ≥250 words of city-specific intro (industry density, named landmarks) above the duplicated vertical body. Otherwise Google flags as doorway pages.'
+    },
+    {
+      id: 'wk11-blog-gdpr',
+      week: 11, type: 'supporting', initialStatus: 'planned',
+      title: 'Blog: Are AI receptionists GDPR-compliant in the UK?', target: '/blog/ai-receptionist-gdpr-uk',
+      cluster: 'compliance', primaryKw: 'ai receptionist gdpr uk', vol: 60, kd: 15, words: 1500,
+      titleTag: 'Are AI Receptionists GDPR-Compliant in the UK? (2026)',
+      meta: 'How to check whether an AI receptionist meets UK GDPR — data residency, retention, DPA, consent on the call, and what to ask vendors.',
+      h1: 'Are AI receptionists GDPR-compliant in the UK?',
+      h2: ['Short answer (with caveats)', 'Where call data lives', 'Retention and erasure', 'Consent on the call', 'What to ask any AI vendor (8-question checklist)', 'Our GDPR posture'],
+      schema: ['Article', 'BreadcrumbList', 'FAQPage'],
+      internalLinks: ['/ai-receptionist-for-dentists', '/pricing'],
+      inspiration: [],
+      notes: 'High-trust topic. The 8-question checklist is the link bait. Cite ICO guidance.'
+    },
+    {
+      id: 'wk12-no-show',
+      week: 12, type: 'tool', initialStatus: 'planned',
+      title: 'Tool: No-show savings calculator (dental)', target: '/tools/no-show-savings-calculator',
+      cluster: 'tools', primaryKw: 'dental no-show calculator', vol: 30, kd: 10, words: 600,
+      titleTag: 'Dental No-Show Cost Calculator | How Much Are You Losing?',
+      meta: 'Calculate the monthly cost of no-shows at your UK dental practice. Inputs: chair-hours, no-show rate, average revenue per slot.',
+      h1: 'How much are no-shows costing your dental practice?',
+      h2: ['Your inputs', 'Your no-show cost', 'How to fix it: confirmations, deposits, AI follow-ups'],
+      schema: ['SoftwareApplication', 'BreadcrumbList'],
+      internalLinks: ['/ai-receptionist-for-dentists', '/pricing'],
+      inspiration: [],
+      notes: 'Same engine as missed-call calc. Embeddable widget version for guest posts on dental practice management blogs.'
+    },
+    {
+      id: 'wk13-how-it-works',
+      week: 13, type: 'pillar', initialStatus: 'planned',
+      title: 'How it works pillar', target: '/how-it-works',
+      cluster: 'generic', primaryKw: 'how does an ai voice agent work', vol: 200, kd: 25, words: 1800,
+      titleTag: 'How an AI Voice Agent Works (UK, 2026) | myaivoiceagent.co',
+      meta: 'A plain-English explainer of how a UK AI voice agent answers calls, books appointments, and integrates with your calendar — built on Retell, Twilio, ElevenLabs.',
+      h1: 'How a UK AI voice agent actually works',
+      h2: ['The five-second journey from ring to booking', 'The British voice (and why it matters)', 'What happens when the agent doesn\'t know something', 'GDPR, EU data residency, call recording', 'Setup in 5 days: what we actually do'],
+      schema: ['HowTo', 'FAQPage', 'BreadcrumbList'],
+      internalLinks: ['/pricing', '/book-demo'],
+      inspiration: [],
+      notes: 'Diagram: caller → Twilio → Retell websocket → ElevenLabs → Google Calendar / CRM. Embed 90-second Loom of an actual call.'
+    },
+    {
+      id: 'wk13-blog-ivr',
+      week: 13, type: 'supporting', initialStatus: 'planned',
+      title: 'Blog: IVR vs AI receptionist — when each wins', target: '/blog/ivr-vs-ai-receptionist',
+      cluster: 'awareness', primaryKw: 'ivr vs ai receptionist', vol: 80, kd: 20, words: 1200,
+      titleTag: 'IVR vs AI Receptionist: When Each One Wins (2026)',
+      meta: 'IVR = press 1, press 2. AI receptionist = a conversation. When each one is right for your business — and when to combine them.',
+      h1: 'IVR vs AI receptionist: when each one wins',
+      h2: ['What IVR actually is (and isn\'t)', 'What an AI receptionist actually is', 'When IVR still wins', 'When AI wins', 'Hybrid setups'],
+      schema: ['Article', 'BreadcrumbList'],
+      internalLinks: ['/how-it-works', '/pricing'],
+      inspiration: [],
+      notes: 'Clear category-defining piece. Honest about IVR\'s remaining strengths.'
+    },
+    {
+      id: 'wk14-best-of',
+      week: 14, type: 'pillar', initialStatus: 'planned',
+      title: 'Pillar: 7 best AI receptionists in the UK in 2026 (honestly compared)', target: '/blog/best-ai-voice-agents-uk-2026',
+      cluster: 'generic', primaryKw: 'best ai voice agent uk', vol: 200, kd: 35, words: 2500,
+      titleTag: 'The 7 Best AI Receptionists in the UK in 2026 (Honestly Compared)',
+      meta: '7 AI receptionists for UK businesses — pricing, vertical fit, voice quality, integrations. Honest pros and cons for each.',
+      h1: 'The 7 best AI receptionists in the UK in 2026',
+      h2: ['How we ranked', '#1 — myaivoiceagent.co', '#2 — Voqal AI', '#3 — AVAI', '#4 — Linda AI', '#5 — ViveoAI', '#6 — The VoIP Shop AI Assistant', '#7 — Marlie', 'Decision matrix'],
+      schema: ['Article', 'BreadcrumbList', 'ItemList', 'FAQPage'],
+      internalLinks: ['/pricing', '/compare/myaivoiceagent-vs-voqal', '/compare/myaivoiceagent-vs-avai'],
+      inspiration: ['https://londonlovesbusiness.com/five-best-ai-answering-services-for-small-businesses-in-the-uk-2026/'],
+      notes: 'Self-serving but honest. Listing ourselves at #1 is fine IF the criteria match (UK-built, transparent pricing, multi-vertical). Honest pros/cons for rivals = honest backlinks. Refresh quarterly.'
+    },
+    {
+      id: 'wk14-roi-calc',
+      week: 14, type: 'tool', initialStatus: 'planned',
+      title: 'Tool: AI receptionist ROI calculator', target: '/tools/ai-receptionist-roi',
+      cluster: 'tools', primaryKw: 'ai receptionist roi calculator', vol: 30, kd: 10, words: 600,
+      titleTag: 'AI Receptionist ROI Calculator | Payback in Months',
+      meta: 'Combine missed-call recovery, no-show savings, and answering-service costs to see your AI receptionist ROI in £/month and payback in months.',
+      h1: 'What\'s your AI receptionist ROI?',
+      h2: ['Your inputs', 'Your monthly ROI', 'Your payback time', 'Try the underlying calculators'],
+      schema: ['SoftwareApplication', 'BreadcrumbList'],
+      internalLinks: ['/tools/missed-call-calculator', '/tools/no-show-savings-calculator', '/pricing'],
+      inspiration: [],
+      notes: 'Combines the two earlier calculators + answering-service cost. Output: £/month + months-to-payback. Most-shared social proof asset.'
+    }
+  ]
+};
+
+// ============================================================================
+// AUTH GATE — verify session before rendering anything
+// ============================================================================
+async function checkAuth() {
+  try {
+    const r = await fetch('/api/auth/me', { credentials: 'same-origin' });
+    if (!r.ok) {
+      window.location.replace('/app/login');
+      return null;
+    }
+    const data = await r.json();
+    return data;
+  } catch {
+    window.location.replace('/app/login');
+    return null;
   }
+}
 
+async function logout() {
+  try {
+    await fetch('/api/auth/logout', { method: 'POST', credentials: 'same-origin' });
+  } catch {}
+  window.location.replace('/app/login');
+}
+
+// ============================================================================
+// CONTENT STATUS PERSISTENCE — per-browser via localStorage
+// ============================================================================
+const STATUS_KEY = (id) => `content-status-${id}`;
+function getStatus(item) {
+  return localStorage.getItem(STATUS_KEY(item.id)) || item.initialStatus || 'planned';
+}
+function setStatus(item, status) {
+  localStorage.setItem(STATUS_KEY(item.id), status);
+}
+const STATUSES = ['planned', 'drafting', 'drafted', 'in_review', 'shipped'];
+function nextStatus(s) {
+  const i = STATUSES.indexOf(s);
+  return STATUSES[(i + 1) % STATUSES.length];
+}
+function statusLabel(s) {
+  return ({ planned: 'Planned', drafting: 'Drafting', drafted: 'Drafted', in_review: 'In review', shipped: 'Shipped' })[s] || s;
+}
+
+// ============================================================================
+// RENDER
+// ============================================================================
+function renderHeader(email) {
+  document.getElementById('user-email').textContent = email || '—';
+  const when = new Date(DATA.asOf);
+  document.getElementById('snapshot-when').textContent =
+    when.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) +
+    ' ' + when.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+}
+
+function renderKPIs() {
+  document.getElementById('kpi-grid').innerHTML = DATA.kpis.map(k => {
+    const pct = k.target ? Math.min(100, (k.value / k.target) * 100) : null;
+    return `
+      <div class="rounded-2xl border border-slate-200 bg-white p-5">
+        <div class="text-xs font-semibold uppercase tracking-wide text-navy-500">${k.label}</div>
+        <div class="mt-2 flex items-baseline gap-1">
+          <span class="text-3xl font-extrabold tabular">${k.value}</span>
+          ${k.suffix ? `<span class="text-sm text-navy-500">${k.suffix}</span>` : ''}
+        </div>
+        ${pct !== null ? `<div class="mt-3 h-1.5 rounded-full bg-slate-100"><div class="h-1.5 rounded-full bg-navy-900" style="width:${pct}%"></div></div>` : ''}
+        <div class="mt-2 text-xs text-navy-500">${k.target !== undefined ? `Target ${k.target}` : (k.hint || '')}</div>
+      </div>`;
+  }).join('');
+}
+
+function renderQuickActions() {
+  document.getElementById('quick-actions').innerHTML = DATA.quickActions.map(a => `
+    <a href="${a.href}" target="_blank" rel="noopener" class="block rounded-xl border border-slate-200 bg-white p-4 hover:border-navy-900 hover:shadow-sm transition">
+      <div class="text-sm font-semibold text-navy-900">${a.label} <span class="text-navy-400">↗</span></div>
+      <div class="mt-1 text-xs text-navy-500">${a.sub}</div>
+    </a>`).join('');
+}
+
+function renderIssues() {
+  document.getElementById('issues-body').innerHTML = DATA.topIssues.map(i => `
+    <tr>
+      <td class="py-2"><span class="inline-block rounded-full px-2 py-0.5 text-xs font-medium pill-${i.severity}">${i.severity}</span></td>
+      <td class="py-2">${i.title}</td>
+      <td class="py-2 text-right tabular">${i.count}</td>
+      <td class="py-2 text-right text-xs text-navy-500">${i.ref}</td>
+    </tr>`).join('');
+}
+
+function renderKeywords(filter = '') {
+  const sel = document.getElementById('cluster-filter');
+  if (sel.options.length <= 1) {
+    const clusters = [...new Set(DATA.keywords.map(k => k.cluster))].sort();
+    clusters.forEach(c => {
+      const opt = document.createElement('option');
+      opt.value = c; opt.textContent = c;
+      sel.appendChild(opt);
+    });
+  }
+  const rows = filter ? DATA.keywords.filter(k => k.cluster === filter) : DATA.keywords;
+  document.getElementById('keywords-body').innerHTML = rows.map(r => {
+    let cell;
+    if (r.rank === null) {
+      cell = '<span class="text-xs text-slate-400">—</span>';
+    } else {
+      const colour = r.rank <= 10 ? 'bg-green-500' : r.rank <= 30 ? 'bg-amber-500' : 'bg-slate-400';
+      const w = Math.max(2, 100 - r.rank);
+      cell = `<div class="inline-flex items-center justify-end gap-2"><div class="h-1.5 w-16 rounded-full bg-slate-100"><div class="h-1.5 rounded-full ${colour}" style="width:${w}%"></div></div><span class="tabular">${r.rank}</span></div>`;
+    }
+    return `<tr>
+      <td class="py-2"><span title="Target: ${r.target}">${r.kw}</span></td>
+      <td class="py-2 text-xs text-navy-500">${r.cluster}</td>
+      <td class="py-2 text-right tabular text-xs">${r.vol}</td>
+      <td class="py-2 text-right tabular text-xs">${r.kd}</td>
+      <td class="py-2 text-right">${cell}</td>
+    </tr>`;
+  }).join('');
+}
+
+function renderContent(filter = '') {
+  const items = DATA.content.map(c => ({ ...c, status: getStatus(c) }));
+  const filtered = !filter ? items
+    : filter === 'not-shipped' ? items.filter(i => i.status !== 'shipped')
+    : items.filter(i => i.status === filter);
+
+  document.getElementById('content-list').innerHTML = filtered.map(c => `
+    <details class="rounded-xl border border-slate-200 bg-white overflow-hidden">
+      <summary class="flex items-center justify-between gap-3 p-4 hover:bg-slate-50">
+        <div class="flex items-center gap-3 min-w-0">
+          <span class="shrink-0 w-12 text-center rounded-md bg-slate-100 text-navy-700 text-xs font-bold py-1.5">Wk ${c.week}</span>
+          <div class="min-w-0">
+            <div class="text-sm font-semibold truncate">${c.title}</div>
+            <div class="text-xs text-navy-500 truncate">${c.target} · ${c.primaryKw} · vol ${c.vol} · KD ${c.kd}</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 shrink-0">
+          <span class="inline-block rounded-full px-2 py-0.5 text-xs font-medium pill-${c.status}">${statusLabel(c.status)}</span>
+          <svg class="chev w-4 h-4 text-navy-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+        </div>
+      </summary>
+      <div class="border-t border-slate-200 p-5 space-y-4 text-sm">
+        <div class="flex flex-wrap gap-2">
+          <button data-id="${c.id}" data-action="next-status" class="rounded-md border border-slate-300 bg-white px-3 py-1.5 text-xs font-medium hover:bg-slate-50">→ ${statusLabel(nextStatus(c.status))}</button>
+          <button data-id="${c.id}" data-action="copy-brief" class="rounded-md border border-slate-300 bg-white px-3 py-1.5 text-xs font-medium hover:bg-slate-50">Copy brief as Markdown</button>
+          ${c.status !== 'planned' ? `<button data-id="${c.id}" data-action="reset-status" class="rounded-md border border-slate-300 bg-white px-3 py-1.5 text-xs font-medium text-rose-700 hover:bg-rose-50">Reset to planned</button>` : ''}
+        </div>
+
+        <dl class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+          <div><dt class="font-semibold text-navy-700">Type</dt><dd class="text-navy-600">${c.type}</dd></div>
+          <div><dt class="font-semibold text-navy-700">Cluster</dt><dd class="text-navy-600">${c.cluster}</dd></div>
+          <div><dt class="font-semibold text-navy-700">Primary keyword</dt><dd class="text-navy-600">${c.primaryKw} (vol ${c.vol}, KD ${c.kd})</dd></div>
+          <div><dt class="font-semibold text-navy-700">Word count target</dt><dd class="text-navy-600">${c.words}+</dd></div>
+        </dl>
+
+        <div>
+          <div class="font-semibold text-navy-700 text-xs mb-1">Title tag (50–60 chars)</div>
+          <code class="block bg-slate-50 border border-slate-200 rounded p-2 text-xs">${escapeHtml(c.titleTag)}</code>
+        </div>
+        <div>
+          <div class="font-semibold text-navy-700 text-xs mb-1">Meta description (140–160 chars)</div>
+          <code class="block bg-slate-50 border border-slate-200 rounded p-2 text-xs">${escapeHtml(c.meta)}</code>
+        </div>
+        <div>
+          <div class="font-semibold text-navy-700 text-xs mb-1">H1</div>
+          <code class="block bg-slate-50 border border-slate-200 rounded p-2 text-xs">${escapeHtml(c.h1)}</code>
+        </div>
+        <div>
+          <div class="font-semibold text-navy-700 text-xs mb-1">H2 outline</div>
+          <ol class="list-decimal list-inside space-y-1 text-xs text-navy-700">
+            ${c.h2.map(h => `<li>${escapeHtml(h)}</li>`).join('')}
+          </ol>
+        </div>
+        <div class="grid md:grid-cols-2 gap-4">
+          <div>
+            <div class="font-semibold text-navy-700 text-xs mb-1">Schema types</div>
+            <ul class="space-y-1 text-xs text-navy-700">${c.schema.map(s => `<li>• ${s}</li>`).join('')}</ul>
+          </div>
+          <div>
+            <div class="font-semibold text-navy-700 text-xs mb-1">Internal links to add</div>
+            <ul class="space-y-1 text-xs text-navy-700">${c.internalLinks.map(l => `<li>• <code>${l}</code></li>`).join('')}</ul>
+          </div>
+        </div>
+        ${c.inspiration?.length ? `
+        <div>
+          <div class="font-semibold text-navy-700 text-xs mb-1">Competitor / inspiration links</div>
+          <ul class="space-y-1 text-xs text-navy-700">${c.inspiration.map(i => `<li>• <a href="${i}" target="_blank" rel="noopener" class="text-sky-700 hover:underline break-all">${i}</a></li>`).join('')}</ul>
+        </div>` : ''}
+        ${c.notes ? `
+        <div class="rounded-md bg-amber-50 border border-amber-200 p-3 text-xs text-amber-900">
+          <span class="font-semibold">Notes:</span> ${escapeHtml(c.notes)}
+        </div>` : ''}
+      </div>
+    </details>
+  `).join('') || '<p class="text-sm text-navy-500 p-4 text-center">No items match this filter.</p>';
+}
+
+function renderFixes() {
+  document.getElementById('fixes-list').innerHTML = DATA.fixes.map(f => `
+    <li class="flex items-center justify-between rounded-lg border border-slate-200 px-3 py-2">
+      <div class="flex items-center gap-3">
+        <span class="inline-block h-3 w-3 rounded-full dot-${f.status}" aria-label="${f.status}"></span>
+        <div>
+          <div class="text-sm font-medium">${f.title}</div>
+          <div class="text-xs text-navy-500">${f.ref}</div>
+        </div>
+      </div>
+      <span class="inline-block rounded-full px-2 py-0.5 text-xs font-medium pill-${f.severity}">${f.severity}</span>
+    </li>`).join('');
+}
+
+function renderPhases() {
+  document.getElementById('phases-list').innerHTML = DATA.phases.map(p => `
+    <li>
+      <div class="flex items-center justify-between text-sm">
+        <span class="font-medium">${p.name}</span>
+        <span class="text-xs text-navy-500">${p.weeks} · ${p.pct}%</span>
+      </div>
+      <div class="mt-1 h-2 w-full rounded-full bg-slate-100"><div class="h-2 rounded-full bg-navy-900" style="width:${p.pct}%"></div></div>
+    </li>`).join('');
+}
+
+function renderActivity() {
+  document.getElementById('activity-log').innerHTML = DATA.activity.map(a => `
+    <li class="flex items-start gap-3">
+      <span class="mt-0.5 inline-block rounded-full bg-slate-100 px-2 py-0.5 text-[10px] uppercase tracking-wide text-navy-600">${a.type}</span>
+      <div><div class="text-sm">${a.text}</div><div class="text-xs text-navy-500">${a.ts}</div></div>
+    </li>`).join('');
+}
+
+function renderWiring() {
+  document.getElementById('wiring-body').innerHTML = DATA.wiring.map(r => `
+    <tr><td class="py-2 font-medium">${r.source}</td><td class="py-2 text-navy-600">${r.metric}</td><td class="py-2 text-xs text-navy-500"><code>${r.api}</code></td></tr>
+  `).join('');
+}
+
+function escapeHtml(s) {
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function buildBriefMarkdown(c) {
+  const lines = [];
+  lines.push(`# ${c.title}`);
+  lines.push('');
+  lines.push(`- **URL**: \`${c.target}\``);
+  lines.push(`- **Type**: ${c.type}`);
+  lines.push(`- **Cluster**: ${c.cluster}`);
+  lines.push(`- **Primary keyword**: ${c.primaryKw} (UK volume ~${c.vol}, KD ~${c.kd})`);
+  lines.push(`- **Word count**: ${c.words}+`);
+  lines.push(`- **Status**: ${statusLabel(getStatus(c))}`);
+  lines.push('');
+  lines.push(`## Title tag`);
+  lines.push(c.titleTag);
+  lines.push('');
+  lines.push(`## Meta description`);
+  lines.push(c.meta);
+  lines.push('');
+  lines.push(`## H1`);
+  lines.push(c.h1);
+  lines.push('');
+  lines.push(`## H2 outline`);
+  c.h2.forEach((h, i) => lines.push(`${i+1}. ${h}`));
+  lines.push('');
+  lines.push(`## Schema`);
+  c.schema.forEach(s => lines.push(`- ${s}`));
+  lines.push('');
+  lines.push(`## Internal links to add`);
+  c.internalLinks.forEach(l => lines.push(`- ${l}`));
+  if (c.inspiration?.length) {
+    lines.push('');
+    lines.push(`## Inspiration / competitors`);
+    c.inspiration.forEach(i => lines.push(`- ${i}`));
+  }
+  if (c.notes) {
+    lines.push('');
+    lines.push(`## Notes`);
+    lines.push(c.notes);
+  }
+  return lines.join('\n');
+}
+
+// ============================================================================
+// EVENTS
+// ============================================================================
+function attachEvents() {
   document.getElementById('reload-btn').addEventListener('click', () => {
-    // Future: fetch /api/dashboard for live values. Today: just re-render.
-    render();
+    renderAll();
     const el = document.getElementById('reload-btn');
     el.textContent = '✓ Refreshed';
     setTimeout(() => el.textContent = '↻ Reload', 1200);
   });
 
-  render();
+  document.getElementById('logout-btn').addEventListener('click', logout);
+
+  document.getElementById('cluster-filter').addEventListener('change', (e) => {
+    renderKeywords(e.target.value);
+  });
+
+  document.getElementById('content-status-filter').addEventListener('change', (e) => {
+    renderContent(e.target.value);
+  });
+
+  // Delegated handler for content row buttons
+  document.getElementById('content-list').addEventListener('click', (e) => {
+    const btn = e.target.closest('button[data-action]');
+    if (!btn) return;
+    e.preventDefault();
+    e.stopPropagation();
+    const id = btn.dataset.id;
+    const action = btn.dataset.action;
+    const item = DATA.content.find(c => c.id === id);
+    if (!item) return;
+
+    if (action === 'next-status') {
+      const cur = getStatus(item);
+      setStatus(item, nextStatus(cur));
+      renderContent(document.getElementById('content-status-filter').value);
+    } else if (action === 'reset-status') {
+      localStorage.removeItem(STATUS_KEY(item.id));
+      renderContent(document.getElementById('content-status-filter').value);
+    } else if (action === 'copy-brief') {
+      const md = buildBriefMarkdown(item);
+      navigator.clipboard.writeText(md).then(() => {
+        btn.textContent = '✓ Copied to clipboard';
+        setTimeout(() => btn.textContent = 'Copy brief as Markdown', 1500);
+      }).catch(() => {
+        btn.textContent = '✗ Copy failed';
+        setTimeout(() => btn.textContent = 'Copy brief as Markdown', 1500);
+      });
+    }
+  });
+}
+
+function renderAll() {
+  renderKPIs();
+  renderQuickActions();
+  renderIssues();
+  renderKeywords(document.getElementById('cluster-filter').value);
+  renderContent(document.getElementById('content-status-filter').value);
+  renderFixes();
+  renderPhases();
+  renderActivity();
+  renderWiring();
+}
+
+// ============================================================================
+// BOOT
+// ============================================================================
+(async function main() {
+  const auth = await checkAuth();
+  if (!auth) return; // already redirecting
+  renderHeader(auth.email);
+  renderAll();
+  attachEvents();
+  // Reveal dashboard
+  document.getElementById('gate').remove();
+  document.getElementById('dashboard').classList.remove('hidden');
+})();
 </script>
 
 </body>
