@@ -1,0 +1,24 @@
+<svg width="280" height="48" viewBox="0 0 280 48" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="myaivoiceagent.co">
+  <title>myaivoiceagent.co</title>
+  <defs>
+    <linearGradient id="mva-mark" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0369A1"/>
+      <stop offset="1" stop-color="#38BDF8"/>
+    </linearGradient>
+    <linearGradient id="mva-co" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#0369A1"/>
+      <stop offset="1" stop-color="#38BDF8"/>
+    </linearGradient>
+  </defs>
+  <g transform="translate(2,6)">
+    <rect width="36" height="36" rx="10" fill="url(#mva-mark)"/>
+    <circle cx="18" cy="15.5" r="4.5" fill="#fff"/>
+    <path d="M9.5 26 a8.5 8.5 0 0 1 17 0" fill="#fff"/>
+    <path d="M10 16 a8 8 0 0 1 16 0" stroke="#fff" stroke-width="1.6" fill="none" stroke-linecap="round" opacity="0.9"/>
+    <rect x="8.5" y="15" width="2.6" height="4.4" rx="1.3" fill="#fff"/>
+    <rect x="24.9" y="15" width="2.6" height="4.4" rx="1.3" fill="#fff"/>
+    <circle cx="26.2" cy="20.5" r="1.5" fill="#10B981" stroke="#fff" stroke-width="0.8"/>
+  </g>
+  <text x="48" y="32" font-family="Plus Jakarta Sans, Inter, system-ui, sans-serif" font-size="20" font-weight="700" fill="#0F172A" letter-spacing="-0.01em">myaivoiceagent</text>
+  <text x="223" y="32" font-family="Plus Jakarta Sans, Inter, system-ui, sans-serif" font-size="20" font-weight="700" fill="url(#mva-co)" letter-spacing="-0.01em">.co</text>
+</svg>
