@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dental No-Show Cost Calculator | How Much Are You Losing?</title>
+  <meta name="description" content="Calculate the monthly cost of no-shows at your UK dental practice. Inputs: chair-hours, no-show rate, average revenue per slot. Free, instant, no email gate.">
+  <meta name="keywords" content="dental no-show calculator, no show cost calculator, dental practice no show cost, missed appointments calculator uk, dental no shows uk, no show savings tool">
+  <link rel="canonical" href="https://www.myaivoiceagent.co/tools/no-show-savings-calculator">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
+  <meta name="geo.region" content="GB">
+  <meta name="geo.placename" content="United Kingdom">
+
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://www.myaivoiceagent.co/tools/no-show-savings-calculator">
+  <meta property="og:title" content="Dental No-Show Cost Calculator (UK, 2026)">
+  <meta property="og:description" content="See what no-shows are costing your UK dental practice each month. Free, instant, no email gate.">
+  <meta property="og:image" content="https://www.myaivoiceagent.co/og-image.png">
+  <meta property="og:site_name" content="myaivoiceagent.co">
+  <meta property="og:locale" content="en_GB">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Dental No-Show Cost Calculator">
+  <meta name="twitter:description" content="UK dental no-show calculator. Sliders, results in 30 seconds, no email gate.">
+  <meta name="twitter:image" content="https://www.myaivoiceagent.co/og-image.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <meta name="theme-color" content="#0369A1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
+          colors: {
+            navy: { 950:'#060C1A', 900:'#0F172A', 800:'#1E293B', 700:'#334155', 600:'#475569' },
+            sky:  { 700:'#0369A1', 600:'#0284C7', 500:'#0EA5E9', 400:'#38BDF8', 100:'#E0F2FE', 50:'#F0F9FF' }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    .gt { background: linear-gradient(135deg, #0369A1 0%, #38BDF8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    input[type="range"] { -webkit-appearance: none; appearance: none; width: 100%; height: 6px; background: #E2E8F0; border-radius: 9999px; outline: none; }
+    input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 22px; height: 22px; border-radius: 50%; background: #0F172A; cursor: pointer; border: 3px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,.2); }
+    input[type="range"]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 50%; background: #0F172A; cursor: pointer; border: 3px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,.2); }
+    .tabular { font-variant-numeric: tabular-nums; }
+  </style>
+
+  <!-- Schema: SoftwareApplication -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "@id": "https://www.myaivoiceagent.co/tools/no-show-savings-calculator#tool",
+    "name": "Dental No-Show Cost Calculator",
+    "description": "A free interactive calculator that estimates the monthly cost of patient no-shows at a UK dental practice. Inputs include chair-hours per day, no-show rate, and average revenue per appointment slot. Output is a £/month lost-revenue figure plus an estimated AI receptionist payback period.",
+    "url": "https://www.myaivoiceagent.co/tools/no-show-savings-calculator",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "All",
+    "browserRequirements": "Requires JavaScript",
+    "inLanguage": "en-GB",
+    "isAccessibleForFree": true,
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "GBP" },
+    "creator": {
+      "@type": "Organization",
+      "name": "myaivoiceagent.co",
+      "alternateName": "Nothing But Value",
+      "url": "https://www.myaivoiceagent.co/"
+    }
+  }
+  </script>
+
+  <!-- Schema: Breadcrumbs -->
+  <script type="application/ld+json">
+  { "@context": "https://schema.org", "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.myaivoiceagent.co/" },
+      { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://www.myaivoiceagent.co/tools/no-show-savings-calculator" },
+      { "@type": "ListItem", "position": 3, "name": "Dental no-show cost calculator", "item": "https://www.myaivoiceagent.co/tools/no-show-savings-calculator" }
+    ]
+  }
+  </script>
+</head>
+
+<body class="font-sans bg-white text-navy-900">
+
+  <header class="border-b border-slate-200 sticky top-0 bg-white/85 backdrop-blur z-40">
+    <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+      <a href="/" class="font-bold text-lg">myaivoiceagent.<span class="gt">co</span></a>
+      <nav class="hidden md:flex items-center gap-6 text-sm font-medium">
+        <a href="/#how-it-works" class="text-navy-700 hover:text-sky-600">How it works</a>
+        <a href="/#industries" class="text-navy-700 hover:text-sky-600">Industries</a>
+        <a href="/pricing" class="text-navy-700 hover:text-sky-600">Pricing</a>
+        <a href="/compare" class="text-navy-700 hover:text-sky-600">Compare</a>
+        <a href="/blog" class="text-navy-700 hover:text-sky-600">Blog</a>
+        <a href="/book-demo" class="rounded-lg bg-navy-900 hover:bg-navy-800 text-white px-4 py-2">Book a Demo</a>
+      </nav>
+    </div>
+  </header>
+
+  <nav aria-label="Breadcrumb" class="max-w-6xl mx-auto px-6 pt-6 text-sm text-slate-500">
+    <ol class="flex gap-1.5">
+      <li><a href="/" class="hover:underline">Home</a></li>
+      <li aria-hidden>/</li>
+      <li>Tools</li>
+      <li aria-hidden>/</li>
+      <li aria-current="page" class="text-navy-800">Dental no-show cost calculator</li>
+    </ol>
+  </nav>
+
+  <!-- HERO -->
+  <section class="max-w-6xl mx-auto px-6 pt-8 pb-6">
+    <p class="inline-flex items-center gap-2 bg-sky-50 text-sky-700 px-3 py-1 rounded-full text-xs font-semibold border border-sky-200">
+      Free &middot; No email gate &middot; Instant result
+    </p>
+    <h1 class="mt-5 text-4xl md:text-5xl font-extrabold tracking-tight max-w-3xl">
+      How much are no-shows <span class="gt">costing your dental practice?</span>
+    </h1>
+    <p class="mt-5 max-w-2xl text-lg text-navy-700">
+      Slide the three inputs below. We&apos;ll show you what your unfilled chair-time is quietly
+      taking out of monthly revenue &mdash; and what an AI receptionist running confirmations and
+      same-day rebookings would save.
+    </p>
+  </section>
+
+  <!-- CALCULATOR -->
+  <section class="max-w-6xl mx-auto px-6 mt-4">
+    <div class="grid md:grid-cols-2 gap-6">
+
+      <!-- INPUTS -->
+      <div class="rounded-3xl border border-slate-200 bg-white p-8">
+        <h2 class="text-xl font-bold">Your inputs</h2>
+        <p class="text-sm text-navy-600 mt-1">Drag the sliders to match your practice.</p>
+
+        <div class="mt-6 space-y-7">
+          <div>
+            <div class="flex justify-between items-baseline">
+              <label for="chairs" class="text-sm font-semibold">Booked appointments per working day</label>
+              <span id="chairs-val" class="text-lg font-bold tabular gt">40</span>
+            </div>
+            <input id="chairs" type="range" min="10" max="200" step="1" value="40" class="mt-2">
+            <div class="text-xs text-navy-500 mt-1">A single-surgery practice typically books 20&ndash;35 slots/day. A 4-chair group books 80&ndash;160.</div>
+          </div>
+
+          <div>
+            <div class="flex justify-between items-baseline">
+              <label for="noshow" class="text-sm font-semibold">No-show / late-cancel rate</label>
+              <span id="noshow-val" class="text-lg font-bold tabular gt">8%</span>
+            </div>
+            <input id="noshow" type="range" min="2" max="25" step="1" value="8" class="mt-2">
+            <div class="text-xs text-navy-500 mt-1">UK industry estimate: 5&ndash;10% in well-run practices, 12&ndash;20% in NHS-heavy or high-anxiety patient bases.</div>
+          </div>
+
+          <div>
+            <div class="flex justify-between items-baseline">
+              <label for="value" class="text-sm font-semibold">Average revenue per appointment slot (£)</label>
+              <span id="value-val" class="text-lg font-bold tabular gt">£120</span>
+            </div>
+            <input id="value" type="range" min="25" max="800" step="5" value="120" class="mt-2">
+            <div class="text-xs text-navy-500 mt-1">NHS UDA-equivalent slot ~£25&ndash;£75; private check-up ~£80&ndash;£150; hygiene ~£70; complex private (root canal, crown) £400+.</div>
+          </div>
+
+          <div>
+            <div class="flex justify-between items-baseline">
+              <label for="rebook" class="text-sm font-semibold">% of empty slots you can refill same-day with AI rebooking</label>
+              <span id="rebook-val" class="text-lg font-bold tabular gt">50%</span>
+            </div>
+            <input id="rebook" type="range" min="0" max="90" step="5" value="50" class="mt-2">
+            <div class="text-xs text-navy-500 mt-1">Realistic: a working short-list of patients on the rebook waitlist + automated calls fills 40&ndash;60% within hours.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RESULTS -->
+      <div class="rounded-3xl bg-navy-900 text-white p-8">
+        <h2 class="text-xl font-bold">Your no-show cost</h2>
+        <p class="text-sm text-slate-300 mt-1">Based on a 22-working-day month.</p>
+
+        <div class="mt-8">
+          <div class="text-xs uppercase tracking-wide text-slate-400">Revenue lost per month</div>
+          <div id="result-month" class="text-5xl md:text-6xl font-extrabold gt mt-2 tabular">&pound;0</div>
+        </div>
+
+        <div class="mt-6 grid grid-cols-2 gap-4">
+          <div class="rounded-xl bg-navy-800 p-4">
+            <div class="text-xs uppercase tracking-wide text-slate-400">Per year</div>
+            <div id="result-year" class="text-2xl font-bold mt-1 tabular">&pound;0</div>
+          </div>
+          <div class="rounded-xl bg-navy-800 p-4">
+            <div class="text-xs uppercase tracking-wide text-slate-400">Empty slots / month</div>
+            <div id="result-slots" class="text-2xl font-bold mt-1 tabular">0</div>
+          </div>
+        </div>
+
+        <div class="mt-6 rounded-xl bg-navy-800 p-4">
+          <div class="text-xs uppercase tracking-wide text-slate-400">Recoverable with AI rebooking</div>
+          <div class="mt-2 text-sm text-slate-200">
+            We estimate <span id="result-recover" class="font-bold gt">&pound;0/mo</span> back at your
+            current rebooking rate &mdash; payback on a £200/mo Starter plan in
+            <span id="result-payback" class="font-bold gt">&mdash; months</span>.
+          </div>
+        </div>
+
+        <div class="mt-6 flex flex-col gap-2">
+          <a href="/book-demo" class="rounded-lg bg-sky-500 hover:bg-sky-400 text-white px-6 py-3 text-sm font-semibold text-center">Book a demo &rarr;</a>
+          <a href="/pricing" class="text-xs text-sky-300 text-center underline">or see the three plans</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW TO FIX IT -->
+  <section class="max-w-3xl mx-auto px-6 mt-20">
+    <h2 class="text-2xl font-bold">How to fix it: confirmations, deposits, AI follow-ups</h2>
+    <p class="mt-3 text-navy-700 leading-relaxed">
+      No-shows aren&apos;t one problem. They&apos;re three, and each one wants its own intervention.
+      Most UK practices we work with run all three in parallel within a few weeks of going live.
+    </p>
+    <ol class="mt-6 space-y-5 text-navy-700 leading-relaxed list-decimal pl-6">
+      <li>
+        <strong>Pre-appointment confirmations</strong> &mdash; an SMS the day before and a short
+        outbound AI call the morning of. The combination typically drops no-show rates from 8&ndash;12%
+        to 4&ndash;6%, because patients with second thoughts cancel rather than ghost. A cancel
+        you know about by 9am is a slot you can refill by 11am; a cancel you find out about at the
+        chair is dead time.
+      </li>
+      <li>
+        <strong>Deposit-taking on high-value slots</strong> &mdash; for new private patients,
+        complex restorative work, and longer hygiene appointments, a £25&ndash;£50 holding deposit
+        cuts no-show rates dramatically. The agent can take the deposit on the booking call, refund
+        it on attendance, or apply it to the bill.
+      </li>
+      <li>
+        <strong>Automated rebooking from a waitlist</strong> &mdash; when a slot opens, the AI
+        works a prioritised short-list of patients (anyone who asked for an earlier date, anyone
+        overdue for recall) and offers the slot via outbound call or WhatsApp. Same-day refill
+        rates of 40&ndash;60% are realistic with a working waitlist of 20&ndash;30 names.
+      </li>
+    </ol>
+    <p class="mt-6 text-navy-700 leading-relaxed">
+      For most UK dental practices, the three together convert £3,000&ndash;£8,000 of monthly
+      no-show losses into £1,500&ndash;£5,000 of recovered revenue &mdash; with no extra reception
+      headcount. The full setup is what we run on every
+      <a href="/ai-receptionist-for-dentists" class="underline text-sky-700">dental practice deployment</a>,
+      and the same logic underlies the broader
+      <a href="/tools/missed-call-calculator" class="underline text-sky-700">missed-call cost calculator</a>
+      &mdash; an unanswered booking call and an unfilled slot are two sides of the same problem.
+    </p>
+  </section>
+
+  <!-- BENCHMARKS -->
+  <section class="max-w-3xl mx-auto px-6 mt-16">
+    <h2 class="text-2xl font-bold">UK dental no-show benchmarks</h2>
+    <p class="mt-3 text-navy-700">
+      Rough sector benchmarks compiled May 2026 from public dental management resources and
+      practice surveys. Use as defaults if you don&apos;t have your own numbers to hand.
+    </p>
+    <div class="mt-6 overflow-x-auto rounded-2xl border border-slate-200">
+      <table class="w-full text-sm">
+        <thead class="bg-slate-50 text-xs uppercase tracking-wide text-navy-600">
+          <tr>
+            <th class="text-left py-3 px-4">Practice profile</th>
+            <th class="text-right py-3 px-4">Typical no-show rate</th>
+            <th class="text-right py-3 px-4">Avg slot value</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-200 text-navy-800">
+          <tr><td class="py-3 px-4">Private cosmetic / implant practice</td><td class="text-right tabular">3&ndash;6%</td><td class="text-right tabular">&pound;250&ndash;&pound;1,500</td></tr>
+          <tr><td class="py-3 px-4">Mixed NHS / private (typical UK SMB)</td><td class="text-right tabular">7&ndash;10%</td><td class="text-right tabular">&pound;90&ndash;&pound;180</td></tr>
+          <tr><td class="py-3 px-4">NHS-heavy practice</td><td class="text-right tabular">10&ndash;15%</td><td class="text-right tabular">&pound;45&ndash;&pound;90</td></tr>
+          <tr><td class="py-3 px-4">High-anxiety / community-dentistry</td><td class="text-right tabular">15&ndash;25%</td><td class="text-right tabular">&pound;40&ndash;&pound;75</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="mt-3 text-xs text-navy-500">Industry estimates compiled May 2026; treat as rules of thumb, not your numbers.</p>
+  </section>
+
+  <!-- CTA -->
+  <section class="max-w-6xl mx-auto px-6 mt-16 mb-16">
+    <div class="rounded-3xl bg-navy-900 text-white p-10 md:p-14 grid md:grid-cols-[1fr_auto] gap-6 items-center">
+      <div>
+        <h2 class="text-2xl md:text-3xl font-bold">Recover your no-show revenue.</h2>
+        <p class="mt-2 text-slate-300 max-w-xl">15-minute demo, no slides &mdash; we walk through your booking flow live and quote a flat monthly fee.</p>
+      </div>
+      <div class="flex flex-col gap-2">
+        <a href="/book-demo" class="rounded-lg bg-sky-500 hover:bg-sky-400 text-white px-6 py-3 text-sm font-semibold text-center whitespace-nowrap">Book a demo &rarr;</a>
+        <a href="/pricing" class="text-xs text-sky-300 text-center underline">or see all three tiers</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="border-t border-slate-200 py-10">
+    <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 text-sm text-slate-600">
+      <div>&copy; 2026 myaivoiceagent.co &middot; A <span class="font-semibold">Nothing But Value</span> brand</div>
+      <div class="flex gap-6">
+        <a href="mailto:ceo@nothingbutvalue.com" class="hover:underline">ceo@nothingbutvalue.com</a>
+        <a href="tel:+447769286772" class="hover:underline">+44 7769 286772</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      const WORKING_DAYS_PER_MONTH = 22;
+      const PLAN_MONTHLY = 200;
+
+      const chairsEl = document.getElementById('chairs');
+      const noshowEl = document.getElementById('noshow');
+      const valueEl  = document.getElementById('value');
+      const rebookEl = document.getElementById('rebook');
+
+      const chairsVal = document.getElementById('chairs-val');
+      const noshowVal = document.getElementById('noshow-val');
+      const valueVal  = document.getElementById('value-val');
+      const rebookVal = document.getElementById('rebook-val');
+
+      const resMonth   = document.getElementById('result-month');
+      const resYear    = document.getElementById('result-year');
+      const resSlots   = document.getElementById('result-slots');
+      const resRecover = document.getElementById('result-recover');
+      const resPayback = document.getElementById('result-payback');
+
+      const fmtGBP = (n) => '£' + Math.round(n).toLocaleString('en-GB');
+      const fmtInt = (n) => Math.round(n).toLocaleString('en-GB');
+
+      function recalc() {
+        const chairs = +chairsEl.value;
+        const noshow = +noshowEl.value / 100;
+        const value  = +valueEl.value;
+        const rebook = +rebookEl.value / 100;
+
+        chairsVal.textContent = chairs;
+        noshowVal.textContent = (noshow * 100).toFixed(0) + '%';
+        valueVal.textContent  = '£' + value.toLocaleString('en-GB');
+        rebookVal.textContent = (rebook * 100).toFixed(0) + '%';
+
+        const slotsLostPerMonth = chairs * noshow * WORKING_DAYS_PER_MONTH;
+        const lostPerMonth      = slotsLostPerMonth * value;
+        const lostPerYear       = lostPerMonth * 12;
+        const recoverPerMonth   = lostPerMonth * rebook;
+
+        resMonth.textContent   = fmtGBP(lostPerMonth);
+        resYear.textContent    = fmtGBP(lostPerYear);
+        resSlots.textContent   = fmtInt(slotsLostPerMonth);
+        resRecover.textContent = fmtGBP(recoverPerMonth) + '/mo';
+
+        if (recoverPerMonth <= PLAN_MONTHLY) {
+          resPayback.textContent = 'longer than a month — start with confirmations only';
+        } else {
+          const months = PLAN_MONTHLY / recoverPerMonth;
+          if (months < 0.25) resPayback.textContent = 'under a week';
+          else if (months < 1) resPayback.textContent = 'under 1 month';
+          else resPayback.textContent = months.toFixed(1) + ' months';
+        }
+      }
+
+      [chairsEl, noshowEl, valueEl, rebookEl].forEach(el => el.addEventListener('input', recalc));
+      recalc();
+    })();
+  </script>
+
+</body>
+</html>
